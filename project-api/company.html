@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>about us</title>
+    <link href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css" rel="stylesheet" /> 
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" /> 
+    <link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.min.css">
+    <link href="src/style.css" rel="stylesheet">
+    <link href="src/output.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="w-11/12 sm:w-3/4 flex items-center p-2 gap-2 bg-blue-100 mb-5 relative navbar-company">
+        <img class="w-10" src="img/20250616_125236-removebg-preview.png" alt="">
+        <div class="w-[2px] h-8 bg-gray-600"></div>
+        <h1 class="text-3xl font-semibold text-gray-600"> Company </h1>
+    </nav>
+    <a href="index.html" class="text-sm mx-3"><i class="fa fa-long-arrow-left mr-1" aria-hidden="true"></i> Back to Home</a>
+    <div class="w-full p-2 mt-5">
+        <h1 class="text-4xl font-extrabold">What is Coolmov ?</h1>
+        <img class="w-11/12 lg:w-3/4 rounded-sm my-4" src="img/header content.svg" alt="">
+        <p class="text-sm font-normal w-11/12 lg:w-3/4 mb-3"> <span class="text-blue-400">Coolmov</span> interface showing Stranger Things and more shows in a mosaic display. 
+            <span class="text-blue-400">Coolmov</span> is a subscription-based streaming service that allows our members to watch TV shows and movies on an internet-connected device. 
+        </p>    
+        <p class="text-sm font-normal w-11/12 lg:w-3/4 mb-3">
+            Depending on your plan, you can also download TV shows and movies to your Android phone or tablet, iPhone, iPad, or Google Chromebook device and watch without an internet connection.
+        </p>
+        <p class="text-sm font-normal w-11/12 lg:w-3/4">
+            If you're already a member and would like to learn more about using <span class="text-blue-400">Coolmov</span>, visit Getting started with Netflix.
+        </p>
+    </div>
+    <div class="w-full p-2 mt-5" id="contact">
+        <h1 class="text-4xl font-extrabold">Contact us</h1>
+        <p class="text-sm ml-2 my-2">Let us know what you need and we will get back to you in no time.</p>
+    <form class="w-full sm:w-11/12 lg:w-3/4 sm:ml-2">
+        <div class="flex gap-3">
+            <div class="w-1/2 mb-5">
+                <label for="firstName" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">First Name</label>
+                <input type="text" id="firstName" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Amadeo" required />
+            </div>
+            <div class="w-1/2 mb-5">
+                <label for="lastName" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Last Name</label>
+                <input type="text" id="lastName" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Yesa" required />
+            </div>
+        </div>
+        <div class="mb-5">
+            <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email address </label>
+            <input type="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="coolmov@gmail.com" required />
+        </div>
+        <div class="mb-5">
+            <label for="subject" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Subject</label>
+            <input type="text" id="subject" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required />
+        </div>
+        <div class="mb-5">
+            <label for="message" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">M essage</label>
+            <textarea id="message" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Your message"></textarea>
+        </div>
+        <p class="text-xs mb-3">
+            By submitting this form you agree to our <span class="text-blue-400">Terms & conditions</span> and our <span class="text-blue-400">Privacy Policy</span> which explains how we may collect, use and disclose your personal information including to third parties.
+        </p>
+        <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Send message</button>
+    </form>
+    </div>
+    <div class="w-full h-10"></div>
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
+    <script src="src/script.js"></script>
+</body>
+</html>

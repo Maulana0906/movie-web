@@ -1,0 +1,22 @@
+[
+  { "poster_path": "panda.webp", "movie": "kungfu panda" },
+  { "poster_path": "dori.webp", "movie": "finding dory" },
+  { "poster_path": "nemo.webp", "movie": "finding nemo" },
+  { "poster_path": "olaf.svg", "movie": "frozen" },
+  { "poster_path": "anger.svg", "movie": "inside out" },
+  { "poster_path": "elsa.svg", "movie": "frozen" },
+  { "poster_path": "moana.svg", "movie": "moana" },
+  { "poster_path": "boss baby.svg", "movie": "the boss baby" },
+  { "poster_path": "buzz.webp", "movie": "toy story 3" },
+  { "poster_path": "woody.webp", "movie": "toy story 3" },
+  { "poster_path": "sulley.webp", "movie": "monsters inc" },
+  { "poster_path": "mike wazowski.webp", "movie": "monsters inc" },
+  { "poster_path": "lightning.webp", "movie": "cars 2" },
+  { "poster_path": "mater.webp", "movie": "cars 2" },
+  { "poster_path": "rapunzel.webp", "movie": "tangled" },
+  { "poster_path": "baymax.webp", "movie": "big hero 6" },
+  { "poster_path": "shifu.webp", "movie": "kungfu panda" },
+  { "poster_path": "red.webp", "movie": "angry birds 2" },
+  { "poster_path": "minion.webp", "movie": "despicable me 3" },
+  { "poster_path": "joy.webp", "movie": "inside out 2" }
+]
