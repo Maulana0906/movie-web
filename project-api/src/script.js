@@ -225,7 +225,17 @@ setTimeout(async function(){
     const allDataPeople = [...dataPeople1.results, ...dataPeople2.results]
     
     wrapperCardActors.innerHTML += actorCards(allDataPeople)
+
+    const allCards = document.querySelectorAll('.card');
+    effectSkeleton(allCards)
 },0)
+function effectSkeleton(data){
+        Array.from(data).forEach(e => {
+            if(e.complete && e.naturalWidth > 0)
+                (e.parentElement) ? e.parentElement.classList.remove('skeleton') : e.classList.remove('skeleton');
+        })
+}
+
 function uiTumbButton(index,thumbnails,containerHome){
     const bgWrappers = containerHome.children;
     Array.from(thumbnails).forEach((e,i)=> {
@@ -268,7 +278,7 @@ function textHome(data){
         :`<h3 class="font-semibold">${findGenre(e)}</h3>`
     ).join('');
     return `
-    <h1 class="sm:text-5xl ${titleSize} mb-1 font-semibold">${data.original_title}</h1>
+    <h1 class="sm:text-5xl ${titleSize} mb-1 font-semibold">${data.title}</h1>
     <div class="my-1 flex items-center gap-1 text-sm sm:text-md">
         ${genre}
     </div>
@@ -291,8 +301,10 @@ function textHome(data){
 function cards(data,type){
 let scrollSnap = (type==='start')?'snap-start':'';
     return `
-<div class="inline-block md:w-[calc(25%-8px)] lg:w-[calc(16.666%-8px)] sm:w-[calc(33.333%-8px)] mx-[4px] w-1/2 ${scrollSnap} rounded-xl  hover:scale-[98%] duration-200 ease-in-out">
-    <img class="rounded-xl w-full shadow-sm" src="https://image.tmdb.org/t/p/w500${data.poster_path}" alt="" />
+<div class="inline-block md:w-[calc(25%-8px)] lg:w-[calc(16.666%-8px)] sm:w-[calc(33.333%-8px)] mx-[4px] w-[calc(50%-8px)] ${scrollSnap} rounded-xl  hover:scale-[98%] duration-200 ease-in-out">
+    <div class="w-full aspect-2/3 skeleton"> 
+        <img class="rounded-xl w-full h-full object-cover shadow-sm card" src="https://image.tmdb.org/t/p/w500${data.poster_path}" alt="" />
+    </div>
     <div class="flex h-3 justify-between mx-1 mt-1">
         <div class="flex">
             <img src="img/star-f.png" alt="" class="w-3 h-3 mr-1" loading="lazy">
@@ -372,10 +384,10 @@ function collectionCards(values){
             if(temp.length<3 && e.poster_path!=null){temp.push(e.poster_path)}
         })
         result += `
-        <div class="flex-none w-[47%] sm:w-1/3 lg:w-[19%] m-0 leading-0 relative min-h-[253px] sm:min-h-[340px] md:min-h-[410px] xl:min-h-[370px]">
+        <div class="flex-none w-[47%] sm:w-1/3 lg:w-[19%] m-0 leading-0 relative min-h-[253px] sm:min-h-[340px] md:min-h-[410px] xl:min-h-[370px] ">
             <img src="https://image.tmdb.org/t/p/w500${temp[2]}" loading="lazy" class="w-10/12 h-auto absolute translate-[12%] opacity-65 rounded-xl shadow-md shadow-gray-600 ">
             <img src="https://image.tmdb.org/t/p/w500${temp[1]}" loading="lazy" class="w-10/12 h-auto absolute translate-[6%] opacity-80 rounded-xl shadow-md shadow-gray-600">
-            <img src="https://image.tmdb.org/t/p/w500${temp[0]}" loading="lazy" class="w-10/12 h-auto absolute z-30 rounded-xl shadow-md shadow-gray-600">
+            <img src="https://image.tmdb.org/t/p/w500${temp[0]}" loading="lazy" class="w-10/12 h-auto absolute z-30 rounded-xl shadow-md shadow-gray-600 skeleton card">
         </div>
         `
     }
@@ -387,7 +399,10 @@ function actorCards(dataPeople){
     for(let value of dataPeople){
         if(value.profile_path!==null & countImg<24){
             countImg +=1;
-            result += `<img class="w-[calc(25%-8px)] sm:w-[calc(16.66%-8px)] md:w-[calc(12.5%-8px)] lg:w-[calc(8.33%-8px)] shadow-md shadow-gray-500 rounded-full duration-300 ease-in-out hover:scale-95" src="https://image.tmdb.org/t/p/w500${value.profile_path}" />`
+            result += `<div class="flex-none w-[calc(25%-8px)] sm:w-[calc(16.66%-8px)] md:w-[calc(12.5%-8px)] lg:w-[calc(8.33%-8px)] rounded-full duration-300 ease-in-out hover:scale-95 skeleton"> 
+                <img class="w-full h-full object-cover shadow-md shadow-gray-500 rounded-full card" src="https://image.tmdb.org/t/p/w500${value.profile_path}" />
+            </div>
+            `
         }
     }
    

@@ -115,10 +115,17 @@ setTimeout(async function(){
         })
     })
 
-    // const pagination  = document.querySelectorAll('.pagination'); 
     loadPagination(init);
-    console.log(init)
+    const allCards = document.querySelectorAll('.cards');
+    effectSkeleton(allCards);
+
 },0)
+function effectSkeleton(data){
+        Array.from(data).forEach(e => {
+            if(e.complete && e.naturalWidth > 0)
+                e.parentElement.classList.remove('skeleton');
+        })
+}
 
 function loadPagination(totalOfWrapper){
     const num = (totalOfWrapper <= 3) ? 4 : (totalOfWrapper == 4) ? 3 : 2;
@@ -159,6 +166,7 @@ function handleArrowButton(btn, i){
 
     containerPagination.children[indexNew].classList.replace('off', 'thumb-on');
     containerPagination.children[indexOld].classList.replace('thumb-on', 'off');
+
 }
 
 function checkTitleSectionInfoMovie(){
@@ -211,7 +219,7 @@ function loadBgInfoMovie(data){
     data.forEach((e,i) => {
         result += `<img src="https://image.tmdb.org/t/p/original${e.backdrop_path}" class="absolute w-full h-full object-cover opacity-65 ${i!=0 ? 'invisible' : ''} background" loading="lazy" alt="">`
     })
-    return result
+    return result;
 }
 
 function textInfoMovie(value, i){
@@ -235,8 +243,8 @@ function textInfoMovie(value, i){
     const genre = findGenre(data.genre_ids)
     return `
     <div class="w-full md:w-10/12 lg:w-8/12 h-full left-0 flex items-center gap-3 md:gap-4 absolute z-10 top-0 px-3 md:px-7 section-text-info-movie">
-    <div class="w-1/2 md:w-48 lg:w-auto lg:h-[96%] aspect-2/3 rounded-lg shadow-sm shadow-slate-500 bg-red-200">
-        <img src="https://image.tmdb.org/t/p/w500${data.poster_path}" class="w-full h-full object-cover object-center rounded-lg" alt="">
+    <div class="w-1/2 md:w-48 lg:w-auto lg:h-[96%] aspect-2/3 rounded-lg shadow-sm shadow-slate-500 skeleton">
+        <img src="https://image.tmdb.org/t/p/w500${data.poster_path}" class="w-full h-full object-cover object-center rounded-lg card" alt="">
     </div>
     <div class="w-1/2 md:pb-20 lg:pb-0">
       <ul class="w-full">
@@ -258,7 +266,9 @@ function textInfoMovie(value, i){
 }
 function cardsViewAll(data){
     return `<div class="p-1 mb-3">
-                <img class="rounded-xl w-full shadow-sm aspect-2/3" src="https://image.tmdb.org/t/p/w500${data.poster_path}" loading="lazy" alt="" />
+                <div class="w-full aspect-2/3 skeleton"> 
+                    <img class="rounded-xl w-full h-full object-cover shadow-sm card" src="https://image.tmdb.org/t/p/w500${data.poster_path}" loading="lazy" alt="" />
+                </div>
                 <div class="flex h-3 justify-between mx-1 mt-1">    
                     <div class="flex">
                         <img src="img/star-f.png" alt="" class="w-3 h-3 mr-1" loading="lazy">
@@ -277,7 +287,9 @@ function cards(data,type){
         let result = `<img class="rounded-xl w-full aspect-2/3 object-cover shadow-sm" src="img/character/${data.poster_path}" alt="" />`;
         if(data[params]!=undefined){
             const uiCard = `
-                <img class="rounded-xl w-full shadow-sm aspect-2/3" src="https://image.tmdb.org/t/p/w500${data.poster_path}" loading="lazy" alt="" />
+                <div class="w-full aspect-2/3 skeleton"> 
+                    <img class="rounded-xl w-full h-full object-cover shadow-sm card" src="https://image.tmdb.org/t/p/w500${data.poster_path}" loading="lazy" alt="" />
+                </div>
                 <div class="flex h-3 justify-between mx-1 mt-1">    
                     <div class="flex">
                         <img src="img/star-f.png" alt="" class="w-3 h-3 mr-1" loading="lazy">
