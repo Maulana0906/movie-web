@@ -46,7 +46,7 @@ setTimeout(async function(){
 
     //Ui card The best
     const wrapperCardTheBest = document.getElementById('wrapperCardTheBest');
-    const dataTheBest = await getApi('discover/movie', '&certification_country=US&certification.lte=G&sort_by=popularity.desc&with_genres=16');
+    const dataTheBest = await getApi('discover/tv', '&certification_country=US&certification.lte=G&sort_by=popularity.desc&with_genres=16');
     cardsTheBest =``;
     dataTheBest.results.forEach((e,i) => {
         if(i<12){
@@ -66,7 +66,7 @@ setTimeout(async function(){
     })
     wrapperCardCharacter.innerHTML += cardsCharacter;
 
-    // section info movierv 
+    // section info movie 
     const dataSectionInfo = await getApi('discover/movie', '&certification_country=US&certification.lte=G&sort_by=popularity.desc&with_genres=16&page=2');
     const wrapperInfo = document.getElementById('sectionInfoMovie');
     let uiSectionInfo = ``;
@@ -306,9 +306,9 @@ function cards(data,type){
     }
     const innerUiCard = loadUiCard('vote_average');
     let scrollSnap = (type==='start')?'snap-start':'';
-    return `<div class="inline-block md:w-[calc(25%-8px)] lg:w-[calc(16.666%-8px)] sm:w-[calc(33.333%-8px)] w-[calc(50%-8px)] ${scrollSnap} mx-1 rounded-xl hover:scale-[98%] duration-200 ease-in-out">
+    return `<a href="detail-movie.html?id=${data.id}" class="inline-block md:w-[calc(25%-8px)] lg:w-[calc(16.666%-8px)] sm:w-[calc(33.333%-8px)] w-[calc(50%-8px)] ${scrollSnap} mx-1 rounded-xl hover:scale-[98%] duration-200 ease-in-out">
                 ${innerUiCard}
-            </div>`
+            </a>`
 }
 
 function uiPagination(pagination, totalOfWrapper){
