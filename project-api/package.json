@@ -15,6 +15,7 @@
   "dependencies": {
     "@tailwindcss/cli": "^4.1.11",
     "daisyui": "^5.0.46",
+    "express": "^5.1.0",
     "flowbite": "^3.1.2"
   }
 }

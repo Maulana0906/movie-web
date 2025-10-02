@@ -39,7 +39,7 @@ setTimeout(async function(){
     let cardsSuggestion = ``;
     dataSuggestion.results.forEach((e,i) => {
         if(i<12){
-            cardsSuggestion += cards(e,'start');
+            cardsSuggestion += cards(e,'start', 'movie');
         }
     })
     wrapperCardSuggestion.innerHTML += cardsSuggestion;
@@ -50,7 +50,7 @@ setTimeout(async function(){
     cardsTheBest =``;
     dataTheBest.results.forEach((e,i) => {
         if(i<12){
-        cardsTheBest += cards(e,'start');
+        cardsTheBest += cards(e,'start', 'series');
         }
     }) 
     wrapperCardTheBest.innerHTML = cardsTheBest;
@@ -91,7 +91,7 @@ setTimeout(async function(){
     const dataMostView = await getApi('discover/movie', '&certification_country=US&certification.lte=G&with_genres=16')
     let cardsMostView = ``;
     dataMostView.results.forEach(e => {
-        cardsMostView += cardsViewAll(e)
+        cardsMostView += cardsViewAll(e, 'movie')
     })
     wrapperMostView.innerHTML += cardsMostView;
 
@@ -282,7 +282,7 @@ function cardsViewAll(data){
             </div>`
 }
 
-function cards(data,type){
+function cards(data,type, typeData){
     function loadUiCard(params){
         let result = `<img class="rounded-xl w-full aspect-2/3 object-cover shadow-sm" src="img/character/${data.poster_path}" alt="" />`;
         if(data[params]!=undefined){
@@ -306,7 +306,7 @@ function cards(data,type){
     }
     const innerUiCard = loadUiCard('vote_average');
     let scrollSnap = (type==='start')?'snap-start':'';
-    return `<a href="detail-movie.html?id=${data.id}" class="inline-block md:w-[calc(25%-8px)] lg:w-[calc(16.666%-8px)] sm:w-[calc(33.333%-8px)] w-[calc(50%-8px)] ${scrollSnap} mx-1 rounded-xl hover:scale-[98%] duration-200 ease-in-out">
+    return `<a href="detail-movie.html?id=${data.id}&typeData=${typeData}" class="inline-block md:w-[calc(25%-8px)] lg:w-[calc(16.666%-8px)] sm:w-[calc(33.333%-8px)] w-[calc(50%-8px)] ${scrollSnap} mx-1 rounded-xl hover:scale-[98%] duration-200 ease-in-out">
                 ${innerUiCard}
             </a>`
 }
