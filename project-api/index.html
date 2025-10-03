@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css" rel="stylesheet" /> 
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" /> 
+    <link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.min.css">
+    <link href="src/style.css" rel="stylesheet">
+    <link href="src/output.css" rel="stylesheet">
+</head>
+<body>
+<!-- navbar -->
+<div class="navbar duration-1000 ease-in-out sm:h-12 h-14 z-40 fixed shadow-sm sm:w-11/12 sm:left-1/2 sm:-translate-x-1/2 sm:mt-2 sm:rounded-2xl">
+  <div class="navbar-start sm:hidden">
+    <div class="dropdown">
+      <div tabindex="0" role="button" class="cursor-pointer text-white">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7" /> </svg>
+      </div>
+      <ul
+        tabindex="0"
+        class="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
+          <li><a>Home</a></li>
+          <li><a>Movies</a></li>
+          <li><a>Series</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="navbar-center sm:w-1/5">
+    <div class="hidden h-full w-3 sm:block"></div>
+    <a class="" href="index.html">
+        <img src="img/20250616_125236-removebg-preview.png" alt="" class="w-10 px-[1px] rounded-full duration-1000 ease-in-out" id="logo">
+    </a>
+  </div>
+  <div class="hidden sm:block sm:w-3/5">
+    <ul class="flex gap-8 justify-center text-white">
+      <li class="cursor-pointer border-b-2 border-white duration-200 ease-in-out"><a>Home</a></li>
+      <li class="cursor-pointer duration-200 ease-in-out"><a>Movies</a></li>
+      <li class="cursor-pointer  duration-200 ease-in-out"><a>Series</a></li>
+    </ul>
+  </div>
+  <div class="navbar-end gap-3 sm:w-1/5">
+    <button class="cursor-pointer">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-white " fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" /> </svg>
+    </button>
+    <button class="cursor-pointer text-2xl mr-1.5">
+      <i class="fa fa-user text-white" aria-hidden="true"></i> 
+    </button>
+    <div class="hidden h-full w-3 sm:block"></div>
+  </div>
+</div>
+<!-- container home -->
+<div class="w-full h-screen relative overflow-hidden" id="containerHome">
+  <!-- background image --> 
+  <div class="absolute inset-0" id="backgroundContent">
+  </div>
+  <div class="w-full h-screen z-20 relative flex flex-col md:flex-row md:items-end md:justify-between justify-end items-center" id="coloring">
+    <!-- text content -->
+    <div class=" w-full md:w-1/2 py-1 lg:pl-7 px-1.5 order-2 md:order-1 text-white" id="textContainerHome">  
+    </div>
+
+    <!-- thumb button -->
+    <div class="rounded-xl md:w-[416px] md:h-[155px] w-[312px] h-[105px] py-1 md:pt-2 md:mb-4 md:order-2 order-1 whitespace-nowrap overflow-hidden scroll-smooth" id="thumbButton">
+    </div>
+  </div>
+</div>
+<!-- trends -->
+<div class="section-trends w-full mt-5 px-2 relative" id="sectionTrends">
+  <h1 class="text-4xl font-bold text-[#222]">Trends</h1>
+  <span class="arrow left hidden invisible sm:visible shadow-xs shadow-gray-500 sm:cursor-pointer z-50 absolute bottom-1/2 translate-y-1/2 left-4 w-8 h-8 bg-white text-[#555] rounded-full text-3xl text-center font-bold"><
+  </span>
+  <div class="overflow-x-auto sm:px-0 px-1 sm:overflow-x-hidden whitespace-nowrap w-full py-3 scroll-smooth duration-500 sm:snap-none snap-x snap-mandatory text-[0px]" id="wrapperCardTrends">
+  </div>
+  <span class="arrow right z-50 sm:cursor-pointer shadow-xs shadow-gray-500 invisible sm:visible absolute bottom-1/2 translate-y-1/2 right-4 w-8 h-8 bg-white text-[#555] rounded-full text-3xl text-center font-bold" >>
+  </span>
+  <div class="w-full h-7 flex gap-2 justify-center items-center pagination invisible sm:visible">
+  </div>
+</div>
+<!-- movies -->
+<div class="section-movie w-full mt-5 px-2 relative overflow-hidden">
+  <div class="w-full pr-4 flex justify-between items-end">
+    <h1 class="text-4xl font-bold text-[#222]">Movies</h1>
+    <a href="" class="text-blue-500">see more  <i class="fa fa-long-arrow-right" aria-hidden="true"></i></a>
+  </div>
+  <div class=" my-1.5 flex w-full items-center mx-auto">
+    <button class="arrow-category left invisible w-0 h-0 leading-0 text-white sm:cursor-pointer bg-[#777] rounded-full text-center font-bold duration-700 ease-in-out">
+      <
+    </button>
+    <ul class="w-full text-sm category-small-data pb-2 sm:pb-0 font-thin flex gap-2 overflow-x-auto scroll-smooth">
+    </ul>
+    <button class="arrow-category right invisible w-0 h-0 leading-0 text-white sm:cursor-pointer bg-[#777] rounded-full text-center font-bold duration-700 ease-in-out" >  
+      >
+    </button>
+  </div>
+
+  <span class="arrow left z-50 hidden invisible sm:visible shadow-xs shadow-gray-500 sm:cursor-pointer absolute bottom-1/2 translate-y-1/2 left-4 w-8 h-8 bg-white text-[#555] rounded-full text-3xl text-center font-bold"><
+  </span>
+  <div class="overflow-x-auto sm:px-0 px-1 sm:overflow-x-hidden whitespace-nowrap w-full py-3 text-[0px] scroll-smooth duration-500 sm:snap-none snap-x snap-mandatory" id="wrapperCardMovies">
+  </div>
+  <span class="arrow right z-50 sm:cursor-pointer shadow-xs shadow-gray-500 invisible sm:visible absolute bottom-1/2 translate-y-1/2 right-4 w-8 h-8 bg-white text-[#555] rounded-full text-3xl text-center font-bold" >>
+  </span>
+  <div class="w-full h-7 flex gap-2 justify-center items-center pagination invisible sm:visible">
+  </div>
+</div>
+<!-- awards -->
+<div class="section-awards w-full relative flex sm:my-11 py-11 items-center justify-center px-1">
+  <img src="img/Frame 200.png" alt="" class="flex-none w-1/2">
+  <div class="flex-none w-1/12 absolute h-[80%] right-1/2 translate-x-9/12 section-awards-gradient"></div>
+  <img src="img/Frame 201.png" alt="" class="flex-none w-1/2">
+  <button class="absolute btn font-normal text-md sm:text-xl md:text-2xl lg:text-4xl tracking-wider px-3 py-6 sm:px-4 sm:py-7 md:px-6 md:py-9 lg:px-7 lg:py-10 rounded-4xl text-white right-1/2 bottom-1/6 translate-x-1/2 translate-y-1/3 whitespace-nowrap">Wacthing Gloden Globe 2024 Movies</button>
+</div>
+<!-- series  -->
+<div class="section-series w-full mt-5 px-2 relative overflow-hidden">
+  <div class="w-full pr-4 flex justify-between items-end">
+    <h1 class="text-4xl font-bold text-[#222]">Series</h1>
+    <a href="" class="text-blue-500">see more  <i class="fa fa-long-arrow-right" aria-hidden="true"></i></a>
+  </div>
+  <div class=" my-1.5 flex w-full items-center mx-auto">
+    <button class="arrow-category left invisible w-0 h-0 leading-0 text-white sm:cursor-pointer bg-[#777] rounded-full text-center font-bold duration-700 ease-in-out">
+      <
+    </button>
+    <ul class="w-full text-sm category-small-data pb-2 sm:pb-0 font-thin flex gap-2 overflow-x-auto scroll-smooth">
+    </ul>
+    <button class="arrow-category right invisible w-0 h-0 leading-0 text-white sm:cursor-pointer bg-[#777] rounded-full text-center font-bold duration-700 ease-in-out" >  
+      >
+    </button>
+  </div>
+
+  <span class="arrow left z-50 hidden invisible sm:visible shadow-xs shadow-gray-500 sm:cursor-pointer absolute bottom-1/2 translate-y-1/2 left-4 w-8 h-8 bg-white text-[#555] rounded-full text-3xl text-center font-bold"><
+  </span>
+  <div class="overflow-x-auto sm:px-0 px-1 sm:overflow-x-hidden whitespace-nowrap w-full py-3 text-[0px] scroll-smooth duration-500 sm:snap-none snap-x snap-mandatory" id="wrapperCardSeries">
+  </div>
+  <span class="arrow right z-50 sm:cursor-pointer shadow-xs shadow-gray-500 invisible sm:visible absolute bottom-1/2 translate-y-1/2 right-4 w-8 h-8 bg-white text-[#555] rounded-full text-3xl text-center font-bold" >>
+  </span>
+  <div class="w-full h-7 flex gap-2 justify-center items-center pagination invisible sm:visible">
+  </div>
+</div>
+<!-- pricing card -->
+<div class="w-full flex flex-col sm:flex-row justify-center items-center gap-10 sm:gap-6 lg:gap-10 p-3 sm:p-0 lg:p-3 ">
+  <div class="flex-none pricing w-11/12 h-[400px] sm:h-[350px] md:h-[400px] sm:w-[27%] lg:w-[250px] bg-white dark:bg-gray-900 relative">
+    <div class="w-full h-5/12 bg-[#030a1b] flex flex-col justify-end pb-7 duration-400 ease-in-out rounded-t-3xl text-center ">
+      <h1 class="text-[#2087db] text-4xl font-semibold mb-3">Basic</h1>
+      <h4 class="text-lg text-[#2087db]">3 month</h4>
+    </div>
+    <div class="w-full h-7/12 pt-7 text-center bg-[#030a1b] rounded-b-3xl border-t-2 border-dashed border-[#2087db] duration-300 ease-in-out">
+      <h1 class="text-[#2087db] text-4xl font-normal mb-3">$15.140</h1>
+      <ul class="text-xs sm:text-[10px] md:text-xs font-thin text-white mt-3">
+        <li class=""><i class="fa fa-check-circle mr-1 sm:m-0 md:m-1 text-white" aria-hidden="true"></i> Watch on 1 supported device</li>
+        <li class=""><i class="fa fa-check-circle mr-1 sm:m-0 md:m-1 text-white" aria-hidden="true"></i> Watch in 720p (HD)</li>
+        <li class=""><i class="fa fa-check-circle mr-1 sm:m-0 md:m-1 text-white" aria-hidden="true"></i> Download on 1 supported device</li>
+        
+      </ul>
+      <button type="button" class="text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 rounded-xl text-sm px-5 py-2.5 text-center mt-8 sm:mt-4 lg:mt-8 cursor-pointer">
+          <i class="fa fa-shopping-bag inline-block" aria-hidden="true"></i> <span class="leading-none inline-block tracking-widest"> CONTINUE </span>
+      </button>
+    </div>
+  </div>
+
+  <div class="flex-none pricing w-11/12 h-[500px] sm:h-[450px] md:h-[500px] sm:w-[32.5%] lg:w-[300px] bg-white dark:bg-gray-900 relative">
+    <div class="w-full h-5/12 bg-gradient-to-r from-cyan-500 to-blue-500 flex flex-col justify-end pb-12 rounded-t-3xl text-center duration-400 ease-in-out">
+      <h1 class="text-white text-4xl font-semibold mb-3">Sugessted</h1>
+      <h4 class="text-lg text-white">6 month</h4>
+    </div>
+    <div class="w-full h-7/12 pt-6 text-center bg-gradient-to-r from-cyan-500 to-blue-500 rounded-b-3xl border-t-2 border-dashed border-white">
+      <h1 class="text-white text-3xl font-normal line-through decoration-red-500">$24.900</h1>
+      <h1 class="text-white text-5xl font-normal mb-3">$22.900</h1>
+      <ul class=" text-sm sm:text-xs md:text-sm font-thin text-white">
+        <li class=""><i class="fa fa-check-circle mr-1 sm:m-0 md:m-1 text-white" aria-hidden="true"></i> Watch on 2 supported device</li>
+        <li class=""><i class="fa fa-check-circle mr-1 sm:m-0 md:m-1 text-white" aria-hidden="true"></i> Watch in 1080p (Full HD)</li>
+        <li class=""><i class="fa fa-check-circle mr-1 sm:m-0 md:m-1 text-white" aria-hidden="true"></i> Download on 2 supported device</li>
+      </ul>
+      <button type="button" class="bg-white rounded-xl text-sm px-5 py-2.5 text-center mt-10 sm:mt-5 lg:mt-10 cursor-pointer hover:bg-slate-100">
+          <i class="fa fa-shopping-bag inline-block" aria-hidden="true"></i> <span class="leading-none inline-block tracking-widest"> CONTINUE </span>
+      </button>
+    </div>
+  </div>
+
+  <div class="flex-none pricing w-11/12 h-[400px] sm:h-[350px] md:h-[400px] sm:w-[27%] lg:w-[250px] bg-white dark:bg-gray-900 relative">
+    <div class="w-full h-5/12 bg-[#030a1b] flex flex-col justify-end pb-7 rounded-t-3xl text-center duration-400 ease-in-out">
+      <h1 class="text-[#2087db] text-4xl font-semibold mb-3">Premium</h1>
+      <h4 class="text-lg text-[#2087db]">12 month</h4>
+    </div>
+    <div class="w-full h-7/12 pt-7 text-center bg-[#030a1b] rounded-b-3xl border-t-2 border-dashed border-[#2087db]">
+      <h1 class="text-[#2087db] text-4xl font-normal mb-3">$105.199</h1>
+      <ul class="text-xs sm:text-[10px] md:text-xs font-thin text-white">
+        <li class=""><i class="fa fa-check-circle mr-1 sm:m-0 md:m-1 text-white" aria-hidden="true"></i> Watch on 4 supported device</li>
+        <li class=""><i class="fa fa-check-circle mr-1 sm:m-0 md:m-1 text-white" aria-hidden="true"></i> Watch in 4K(Ultra HD) + HDR</li>
+        <li class=""><i class="fa fa-check-circle mr-1 sm:m-0 md:m-1 text-white" aria-hidden="true"></i> Download on 6 supported device</li>
+      </ul>
+      <button type="button" class="text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 rounded-xl text-sm px-5 py-2.5 text-center mt-8 sm:mt-4 lg:mt-8 cursor-pointer">
+          <i class="fa fa-shopping-bag inline-block" aria-hidden="true"></i> <span class="leading-none inline-block tracking-widest"> CONTINUE </span>
+      </button>
+    </div>
+  </div>
+</div>
+<!-- collection -->
+<div class="section-collection w-full mt-5 px-2 relative overflow-hidden">
+  <div class="w-full pr-4 flex justify-between items-end">
+    <h1 class="text-4xl font-bold text-[#222]">Collection</h1>
+  </div>
+  <div class="flex flex-wrap justify-between sm:justify-start lg:justify-between px-1 w-full py-3" id="wrapperCardCollection">
+  </div>
+</div>
+<!-- charactors -->
+<div class="section-actors w-full mt-5 px-2 relative overflow-hidden">
+  <div class="w-full pr-4 flex justify-between items-end">
+    <h1 class="text-4xl font-bold text-[#222]">Top Actors</h1>
+    <a href="" class="text-blue-500">see more  <i class="fa fa-long-arrow-right" aria-hidden="true"></i></a>
+  </div>
+  <span class="arrow left z-50 hidden invisible sm:visible shadow-xs shadow-gray-500 sm:cursor-pointer absolute bottom-1/2 translate-y-1/2 left-4 w-8 h-8 bg-white text-[#555] rounded-full text-3xl text-center font-bold"><
+  </span>
+  <div class="flex gap-2 overflow-x-auto sm:px-0 px-1 sm:overflow-x-hidden w-full py-3 text-[0px] scroll-smooth duration-500 sm:snap-none snap-x snap-mandatory" id="wrapperCardActors">
+  </div>
+  <span class="arrow right z-50 sm:cursor-pointer shadow-xs shadow-gray-500 invisible sm:visible absolute bottom-1/2 translate-y-1/2 right-4 w-8 h-8 bg-white text-[#555] rounded-full text-3xl text-center font-bold" >>
+  </span>
+  <div class="w-full h-7 flex gap-2 justify-center items-center pagination invisible sm:visible">
+  </div>  
+</div>
+<!-- app kids -->
+<div class="w-full h-[50vh] lg:h-[100vh] bg-blue-400 px-3 pt-6 sm:p-4 lg:p-10 overflow-y-hidden">
+    <h1 class="text-4xl font-semibold text-center text-white sm:mb-4">Family-friendly Streaming</h1>
+    <p class="text-xs font-thin sm:text-md leading-4 my-3 text-center text-white">Create kids profile, set parental control, and choose rating levels. Easily find new favorites by string and using age filters.</p>
+    <div class="flex justify-center relative">
+      <div class="w-2/12"></div>
+      <div class="flex-none w-[20%] sm:w-2/12">
+        <img src="img/sing.webp" alt="" class="">
+        <img src="img/sing.webp" alt="" class="-mt-4 scale-y-[-1] opacity-25">
+      </div>
+      <div class="flex-none w-[30%] sm:w-3/12 text-center">
+        <img src="img/panda.webp" alt="" class="">
+        <img src="img/panda.webp" alt="" class="-mt-5 scale-y-[-1] opacity-25">
+      </div>
+      <div class="flex-none w-[40%] sm:w-4/12">
+        <img src="img/raya.webp" alt="" class="">
+        <img src="img/raya.webp" alt="" class="-mt-5 scale-y-[-1] opacity-25">
+      </div>
+      <a href="app-kids.html">
+        <button class="cursor-pointer text-sm sm:text-md lg:text-lg px-3 sm:px-6 lg:px-9 py-2 sm:py-3 top-[55%] left-1/2 -translate-x-1/2 rounded-lg bg-[#030a1b] text-white absolute whitespace-nowrap">Wacth the children's section</button>
+      </a>
+    </div>
+</div>
+<!-- question -->
+<div class="w-11/12 md:w-8/12 m-auto">
+  <h1 class="text-center my-5 text-3xl font-semibold">Frequently Asked Questions</h1>
+  <div class="collapse collapse-arrow bg-base-100 border border-blue-400 my-2">
+    <input type="radio" name="my-accordion-2" checked="checked" />
+    <div class="collapse-title font-normal">What is Coolmov?</div>
+    <div class="collapse-content text-gray-500 text-sm font-extralight">Coolmov is a streaming service that offers a wide variety of award-winning TV shows, movies, anime, documentaries, and more on thousands of internet-connected devices.
+You can watch as much as you want, whenever you want without a single commercial – all for one low monthly price. There's always something new to discover and new TV shows and movies are added every week!</div>
+  </div>
+  <div class="collapse collapse-arrow bg-base-100 border border-blue-400 my-2">
+    <input type="radio" name="my-accordion-2" checked="checked" />
+    <div class="collapse-title font-normal">Where can i wacth?</div>
+    <div class="collapse-content text-gray-500 text-sm font-extralight">Watch anywhere, anytime. Sign in with your Coolmov account to watch instantly on the web at coolmov.com from your personal computer or on any internet-connected device that offers the Coolmov app, including smart TVs, smartphones, tablets, streaming media players and game consoles.
+You can also download your favorite shows with the iOS or Android app. Use downloads to watch while you're on the go and without an internet connection. Take Coolmov with you anywhere.</div>
+  </div>
+  <div class="collapse collapse-arrow bg-base-100 border border-blue-400 my-2">
+    <input type="radio" name="my-accordion-2" checked="checked" />
+    <div class="collapse-title font-normal">Is Coolmov good for kids & families?</div>
+    <div class="collapse-content text-gray-500 text-sm font-extralight">The Coolmov Kids experience is included in your membership to give parents control while kids enjoy family-friendly TV shows and movies in their own space.
+    Kids profiles come with PIN-protected parental controls that let you restrict the maturity rating of content kids can watch and block specific titles you don’t want kids to see.</div>
+  </div>
+  <div class="collapse collapse-arrow bg-base-100 border border-blue-400 my-2">
+    <input type="radio" name="my-accordion-2" checked="checked" />
+    <div class="collapse-title font-normal">How much does Coolmov cost?</div>
+    <div class="collapse-content text-gray-500 text-sm font-extralight">Watch Coolmov on your smartphone, tablet, Smart TV, laptop, or streaming device, all for one fixed monthly fee. Plans range from USD 15.140 to USD 105.199 a month. No extra costs, no contracts.</div>
+  </div>
+</div>
+<!-- footer -->
+<footer class="flex flex-wrap sm:footer-horizontal bg-base-300 text-base-content p-2 sm:px-10 sm:pt-10 mt-5">
+  <nav class="w-1/2 md:w-1/3 flex flex-col">
+    <h6 class="footer-title">Explore</h6>
+    <a href="movies.html" class="link link-hover">Movies</a>
+    <a href="series.html" class="link link-hover">Tv Series</a>
+    <a href="actors.html" class="link link-hover">Actors </a>
+    <a href="#sectionTrends" class="link link-hover">Trends</a>
+  </nav>
+  <nav class="w-1/2 md:w-1/3 flex flex-col">
+    <h6 class="footer-title">Company</h6>
+    <a href="company.html" class="link link-hover">About us</a>
+    <a href="company.html#contact" class="link link-hover">Contact</a>
+  </nav>
+  <nav class="w-full md:w-1/3 flex flex-col mt-2 md:m-0 py-1 md:p-0">
+    <h6 class="footer-title">Social</h6>
+    <div class="flex gap-4">
+      <a class="" href="https://www.tiktok.com/@cool_dev9?_t=ZS-8yTaTAgVcNl&_r=1">
+        <img src="img/tiktok-svgrepo-com.svg" class="w-8" alt="">
+      </a>
+      <a class="text-3xl" href="https://www.instagram.com/cool_dev9?igsh=MWRvNjdmbWd3ajFscA==">
+        <i class="fa fa-instagram" aria-hidden="true"></i>
+      </a>
+      <a class="text-3xl" href="https://github.com/Maulana0906">
+        <i class="fa fa-github" aria-hidden="true"></i>
+      </a>
+      <a class="text-3xl" href="https://www.linkedin.com/in/mohamad-maulana-reza-r-1180732b9?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app">
+        <i class="fa fa-linkedin-square" aria-hidden="true"></i>
+      </a>
+    </div>
+  </nav>
+  <div class="w-full mt-4 text-center">
+    <span class="text-sm text-gray-500 sm:text-center dark:text-gray-400">© 2025 <a href="index.html" class="hover:underline">Coolmov™</a>. All Rights Reserved.
+    </span>
+  </div>
+</footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
+    <script src="src/script.js"></script>
+</body>
+</html>
