@@ -117,8 +117,8 @@ setTimeout(async function(){
     const dataTrendsMovies = await getApi('movie/popular');
     let cardTrends = ``;
     for(let i=0; i<12; i++){
-        cardTrends += cards(dataTrendsMovies.results[i],'start');
-        cardTrends += cards(dataTrendsSeries.results[i],'end')
+        cardTrends += cards(dataTrendsMovies.results[i],'start', 'movie');
+        cardTrends += cards(dataTrendsSeries.results[i],'end', 'series')
     }
     wrapperCardTrends.innerHTML += cardTrends;
 
@@ -128,9 +128,9 @@ setTimeout(async function(){
     cardMovies =``;
     for(let i=0; i<12; i++){    
         if(i%2==0){
-            cardMovies += cards(dataMoviesRandom.results[i],'start')
+            cardMovies += cards(dataMoviesRandom.results[i],'start', 'movie')
         }else{
-            cardMovies += cards(dataMoviesRandom.results[i], 'end')
+            cardMovies += cards(dataMoviesRandom.results[i], 'end', 'movie')
         }
     }
     wrapperCardMovies.innerHTML += cardMovies;
@@ -195,7 +195,7 @@ setTimeout(async function(){
     const wrapperCardSeries = document.getElementById('wrapperCardSeries');
     let cardSeries = ``
     dataSeries.results.forEach((e,i) => {
-        cardSeries += (i%2==0) ? cards(e,'start') : cards(e,'end');
+        cardSeries += (i%2==0) ? cards(e,'start', 'series') : cards(e,'end', 'series');
     })
     wrapperCardSeries.innerHTML = cardSeries;
     const pricing = document.querySelectorAll('.pricing');
@@ -298,10 +298,10 @@ function textHome(data){
     </div>
     `
 }
-function cards(data,type){
+function cards(data,type, typeData){
 let scrollSnap = (type==='start')?'snap-start':'';
     return `
-<div class="inline-block md:w-[calc(25%-8px)] lg:w-[calc(16.666%-8px)] sm:w-[calc(33.333%-8px)] mx-[4px] w-[calc(50%-8px)] ${scrollSnap} rounded-xl  hover:scale-[98%] duration-200 ease-in-out">
+<a href="detail-movie.html?id=${data.id}&typeData=${typeData}" class="inline-block md:w-[calc(25%-8px)] lg:w-[calc(16.666%-8px)] sm:w-[calc(33.333%-8px)] mx-[4px] w-[calc(50%-8px)] ${scrollSnap} rounded-xl  hover:scale-[98%] duration-200 ease-in-out">
     <div class="w-full aspect-2/3 skeleton"> 
         <img class="rounded-xl w-full h-full object-cover shadow-sm card" src="https://image.tmdb.org/t/p/w500${data.poster_path}" alt="" />
     </div>
@@ -315,7 +315,7 @@ let scrollSnap = (type==='start')?'snap-start':'';
             <p class="leading-none text-sm">${data.popularity}</p>
         </div>
     </div>
-</div>
+</a>
 `
 }
 function uiPagination(pagination, totalOfWrapper){

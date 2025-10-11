@@ -348,8 +348,6 @@ function getApi(params,query){
     .then(e => e.json())
     .then(e => (e.length===0)?'Movie Not Found' : e);
 }
-
-
 // | Kebutuhan                    | Endpoint URL                       |
 // | ---------------------------- | ---------------------------------- |
 // | 🔥 Movie populer             | `/movie/popular`                   |
