@@ -43,21 +43,92 @@ setTimeout(async ()=> {
 
     // container Home
     const movie = await getApi(idMovie, typeData);
+    console.log(movie)
     const containerHome = document.getElementById('containerHome');
     const uiContainerHome = loadUiHome(movie, typeData);
 
     containerHome.innerHTML += uiContainerHome;
+    document.getElementById('storyLine').innerHTML = movie.overview;
 
     document.addEventListener('click', (el) => {
         if(el.target.classList.contains('btn-home')){
             handleButton(el.target);
-        }else if(el.target.classList.contains('closeModalWacthVideo')){
-            el.target.remove()
-            document.body.style.overflow = '';
         }
     })
 
+    // cast
+    loadUiCast(movie.id, typeData);
+
+    if(typeData === 'series') seasonsOfSeries(movie.seasons)
+    
 },0)
+
+function seasonsOfSeries(data){
+    const seasons = data.map(e => ({name : e.name, episode : e.episode_count}));
+
+    const uiDropdown = seasons.map(e => `<li><a class="whitespace-nowrap">${e.name}</a></li>`);
+    const ui = `<ul class="flex gap-3">
+    <li class="text-sm text-blue-900">Episode</li>
+    <li class="text-sm text-blue-900">Reviews</li>
+  </ul>
+
+  <div class="w-full mt-3">
+    <h1 class="font-semibold text-xl">Seasons 1</h1>
+    <div class="w-full flex justify-between">
+      <h2 class="my-1 font-semibold text-xl">1-9 Episode</h2>
+      <div class="dropdown dropdown-start">
+        <div tabindex="0" role="button" class="px-4 py-1 rounded-md text-sm cursor-pointer">Seasons 1 <i class="fa fa-caret-down ml-1" aria-hidden="true"></i> </div>
+          <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-box z-1 p-2 shadow-sm">
+            ${uiDropdown}
+          </ul>
+      </div>
+      
+    </div>
+    <div class="w-full flex gap-3 text-white overflow-x-auto">
+
+      <div class="flex-none w-1/4 aspect-video rounded-xl bg-black relative">
+        <img src="img/Frame 201.png" class="w-full h-full object-cover rounded-xl opacity-80" alt="">
+        <div class="w-full h-full absolute bottom-0 rounded-xl flex justify-center items-center text-6xl" id="coloring">
+          <i class="fa fa-play-circle opacity-60" aria-hidden="true"></i>
+        </div>
+        <div class="absolute bottom-0 p-2">
+          <h1 class="text-md font-semibold">Chapter 1</h1>
+          <p class="text-xs">Lorem ipsum dolor sit amet consectetur adipisicing elit. Cum, tempora?</p>
+        </div>
+      </div>
+  
+    </div>
+  </div>
+                `;
+    
+}
+
+async function loadUiCast(id, type){
+    const typeData = (type == 'series') ? 'tv' : 'movie';
+    const respon = await fetch(`https://api.themoviedb.org/3/${typeData }/${id}/credits?api_key=8482e16292527bd819173faa9e3fb365`)
+    .then(e => e.json())
+    .then(e => (e.length===0)?'Movie Not Found' : e);
+
+    const cast = respon.cast;
+    const containerCast = document.getElementById('containerCast')
+    let cardCasts = ``;
+    
+    cast.forEach(data => {
+        const uiCard = `<div class="flex-none w-[16.6%] h-20 flex items-center gap-1.5">
+                  <div class="w-[30%] aspect-1/1">
+                    <img src="https://image.tmdb.org/t/p/original${data.profile_path}" class=" w-full h-full object-cover rounded-full" alt="">
+                  </div>
+                  <div class="w-[70%]">
+                    <h1 class="text-md font-semibold">${data.original_name}</h1>
+                    <p class="text-xs">${data.character}</p>
+                  </div>
+                </div>`
+        cardCasts += (data.profile_path == null) ? '' : uiCard; 
+    });
+    containerCast.innerHTML += cardCasts;
+
+
+}
 
 function loadUiHome(data, typeData){
     let firstList = '';
@@ -163,7 +234,6 @@ async function wacthingMovie(){
     const res = await fetch(`https://api.themoviedb.org/3/${typeData}/${id}/videos?api_key=8482e16292527bd819173faa9e3fb365`)
                 .then(e => e.json())
                 .then(e => (e.length===0)?'Movie Not Found' : e.results);
-    console.log(res)
     const respon = await checkTrailerMovie(res);
     if(!respon){
         videoNotFound(type)
@@ -203,18 +273,16 @@ async function checkTrailerMovie(data){
 }
 
 function wacthVideoInAlert(key){
-    const alert = `<div class="h-screen w-full fixed z-100 top-0 pt-1 bg-[#33333358] backdrop-blur-xs closeModalWacthVideo"> 
-        <iframe
-        class="h-full aspect-video mx-auto"
+    const alert = `<iframe
+        class="w-full h-full"
         src="https://www.youtube.com/embed/${key}"
         title="YouTube video player"
         frameborder="0"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
         allowfullscreen
-        ></iframe>
-    </div>`
-    document.body.innerHTML += alert; 
-    document.body.style.overflow = 'hidden';
+        ></iframe>`;
+    document.getElementById('contentModal').innerHTML = alert; 
+    my_modal_2.showModal()
 }
 
 function videoNotFound(type){
