@@ -43,7 +43,6 @@ setTimeout(async ()=> {
 
     // container Home
     const movie = await getApi(idMovie, typeData);
-    console.log(movie)
     const containerHome = document.getElementById('containerHome');
     const uiContainerHome = loadUiHome(movie, typeData);
 
@@ -59,48 +58,124 @@ setTimeout(async ()=> {
     // cast
     loadUiCast(movie.id, typeData);
 
+    // season series
     if(typeData === 'series') seasonsOfSeries(movie.seasons)
+    reviewsVideo(idMovie, typeData);
     
+    // episode
+    document.addEventListener('click', (el) => {
+        if(el.target.classList.contains('swapSeason')) {
+            const seasonNow = el.target.textContent.split(' ')[1];
+            seasonsOfSeries(movie.seasons, seasonNow)
+        }
+    })    
+
+    // replace content on season section
+    document.addEventListener('click', el => {
+        const item = el.target;
+        if(item.classList.contains('swapContentOnSeason')){
+            if(!item.classList.contains('activeContent')) {
+                swapContentOnSeason(item);
+            }
+        }
+    })
+
 },0)
 
-function seasonsOfSeries(data){
-    const seasons = data.map(e => ({name : e.name, episode : e.episode_count}));
+function swapContentOnSeason(item){
+    const siblings = item.parentElement.children
+    const sibling = Array.from(siblings).filter(e => e!=item)
+    const containerSeason = document.getElementById('contentSeasons');
+    const containerReview = document.getElementById('contentReview');
 
-    const uiDropdown = seasons.map(e => `<li><a class="whitespace-nowrap">${e.name}</a></li>`);
-    const ui = `<ul class="flex gap-3">
-    <li class="text-sm text-blue-900">Episode</li>
-    <li class="text-sm text-blue-900">Reviews</li>
-  </ul>
+    containerSeason.classList.toggle('block')
+    containerSeason.classList.toggle('hidden')
+    containerReview.classList.toggle('flex')
+    containerReview.classList.toggle('hidden')
 
-  <div class="w-full mt-3">
-    <h1 class="font-semibold text-xl">Seasons 1</h1>
-    <div class="w-full flex justify-between">
-      <h2 class="my-1 font-semibold text-xl">1-9 Episode</h2>
-      <div class="dropdown dropdown-start">
-        <div tabindex="0" role="button" class="px-4 py-1 rounded-md text-sm cursor-pointer">Seasons 1 <i class="fa fa-caret-down ml-1" aria-hidden="true"></i> </div>
-          <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-box z-1 p-2 shadow-sm">
-            ${uiDropdown}
-          </ul>
-      </div>
-      
-    </div>
-    <div class="w-full flex gap-3 text-white overflow-x-auto">
+    sibling[0].classList.remove('activeContent');
+    item.classList.add('activeContent');
 
-      <div class="flex-none w-1/4 aspect-video rounded-xl bg-black relative">
-        <img src="img/Frame 201.png" class="w-full h-full object-cover rounded-xl opacity-80" alt="">
+}
+
+async function reviewsVideo(id, type){
+    const typeData = type == 'series' ? 'tv' : 'movie'
+    const container = document.getElementById('contentReview');
+
+    const respon = await fetch(`https://api.themoviedb.org/3/${typeData+'/'+id}/reviews?api_key=8482e16292527bd819173faa9e3fb365`)
+                    .then(e => e.json()).then(e => e.results);
+    let cardreviews = ``;
+    respon.forEach(data => {
+        const iconProfile = (data.author_details.avatar_path == null) ? `<i class="fa fa-user px-2.5 py-2 border-2 border-gray-500 text-gray-500 rounded-full" aria-hidden="true"></i>` : ` <img class="w-1/4 aspect-square rounded-full mx-auto" src="https://image.tmdb.org/t/p/original${data.author_details.avatar_path}">`
+        const uiCard = ` <div class="flex-none w-1/8 p-1 text-center">
+        ${iconProfile}
+        <h2 class="text-sm font-semibold">${data.author}</h2>
+        <p class="text-2xs text-justify">"${data.content}"</p>
+      </div>`
+      cardreviews += uiCard
+    })
+
+    container.innerHTML +=cardreviews;
+}
+
+async function seasonsOfSeries(data, season){
+    const containerContentSeasons = document.getElementById('contentSeasons');
+    const seasons = data.map(e => ({name : e.name, episode_count : e.episode_count}));
+    const seasonNow = (season == undefined) ? {name :seasons[0].name, episode_count : seasons[0].episode_count} : {name : seasons[season-1].name,  episode_count : seasons[season-1].episode_count};
+    const uiDropdown = seasons.map(e => `<li><a class="whitespace-nowrap swapSeason">${e.name}</a></li>`).join('');
+    const episodeOnSeasonNow = await epsiodeInSeries(seasonNow);
+
+    let cardsEpisode = ``;
+
+    episodeOnSeasonNow[0].forEach(data => {
+        const uiCardEpisode = ` <div class="flex-none w-1/4 aspect-video rounded-xl bg-black relative cursor-pointer">
+        <img src="https://image.tmdb.org/t/p/original${data.still_path}" class="w-full h-full object-cover rounded-xl opacity-80" alt="">
         <div class="w-full h-full absolute bottom-0 rounded-xl flex justify-center items-center text-6xl" id="coloring">
           <i class="fa fa-play-circle opacity-60" aria-hidden="true"></i>
         </div>
         <div class="absolute bottom-0 p-2">
-          <h1 class="text-md font-semibold">Chapter 1</h1>
-          <p class="text-xs">Lorem ipsum dolor sit amet consectetur adipisicing elit. Cum, tempora?</p>
+          <h1 class="text-md font-semibold">Chapter ${data.episode_number}</h1>
+          <p class="text-xs">${data.overview}</p>
         </div>
+      </div>`
+      cardsEpisode += uiCardEpisode;
+    })
+
+    const ui = `
+    <h1 class="font-semibold text-xl">${seasonNow.name}</h1>
+    <div class="w-full flex justify-between">
+      <h2 class="my-1 font-semibold text-xl">${episodeOnSeasonNow[1]}</h2>
+      <div class="dropdown dropdown-start">
+        <div tabindex="0" role="button" class="px-4 py-1 rounded-md text-sm cursor-pointer">${seasonNow.name}<i class="fa fa-caret-down ml-1" aria-hidden="true"></i> </div>
+          <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-box z-1 p-2 shadow-sm">
+            ${uiDropdown}
+          </ul>
       </div>
+      </div>
+    <div class="w-full flex gap-3 text-white overflow-x-auto">
+      ${cardsEpisode}
   
-    </div>
-  </div>
-                `;
-    
+    </div>`;
+    containerContentSeasons.innerHTML = ui;
+}
+
+async function epsiodeInSeries(data){
+    const url = new URLSearchParams(window.location.search);
+    const idMovie = url.get('id');  
+    const typeData = url.get('typeData') == 'series' ? 'tv' : 'movie'
+
+    let respon = [];
+    let num_episode = 0
+    for(let i=1; i <= data.episode_count; i++){
+        const temp = await fetch(`https://api.themoviedb.org/3/${typeData}/${idMovie}/season/${data.name.split(' ')[1]}/episode/${i}?api_key=8482e16292527bd819173faa9e3fb365`)
+                    .then(e => e.json()).then(e => e);
+        if(temp != undefined){
+            respon.push(temp)
+            num_episode +=1;
+        } 
+    }
+    const stringEpisode = (num_episode > 1) ? `1 - ${num_episode} Episode` : `${num_episode} Episode`;
+    return [respon, stringEpisode]
 }
 
 async function loadUiCast(id, type){
@@ -112,22 +187,22 @@ async function loadUiCast(id, type){
     const cast = respon.cast;
     const containerCast = document.getElementById('containerCast')
     let cardCasts = ``;
-    
-    cast.forEach(data => {
-        const uiCard = `<div class="flex-none w-[16.6%] h-20 flex items-center gap-1.5">
+    const uiCard = (data) => `<div class="flex-none w-[16.6%] h-20 flex items-center gap-1.5">
                   <div class="w-[30%] aspect-1/1">
                     <img src="https://image.tmdb.org/t/p/original${data.profile_path}" class=" w-full h-full object-cover rounded-full" alt="">
                   </div>
                   <div class="w-[70%]">
-                    <h1 class="text-md font-semibold">${data.original_name}</h1>
-                    <p class="text-xs">${data.character}</p>
+                    <h1 class="text-md font-semibold">${data.name}</h1>
+                    <p class="text-xs">${data.character || data.job}</p>
                   </div>
-                </div>`
-        cardCasts += (data.profile_path == null) ? '' : uiCard; 
-    });
+                </div>`;
+    if(cast.length == 0){
+        respon.crew.forEach(data => cardCasts += (data.profile_path == null) ? '' : uiCard(data));
+    }else{
+        cast.forEach(data => cardCasts += (data.profile_path == null) ? '' : uiCard(data));
+    }
+
     containerCast.innerHTML += cardCasts;
-
-
 }
 
 function loadUiHome(data, typeData){
@@ -184,7 +259,6 @@ function loadUiHome(data, typeData){
         </div>
     </div>`
 }
-
 function handleButton(btn){
     const btnHome = document.querySelectorAll('.btn-home');
     const findBtn = Array.from(btnHome).indexOf(btn);

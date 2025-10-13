@@ -158,3 +158,6 @@ border: 1px solid #ffffff4d;
   background-color: #dbeafe;
   transform: rotate(45deg);
 }
+.activeContent{
+  border-bottom: 2px solid black;
+}
