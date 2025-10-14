@@ -80,7 +80,62 @@ setTimeout(async ()=> {
         }
     })
 
+    similarVideo(idMovie,typeData);
+    recomendationVideo(idMovie,typeData);
+
 },0)
+
+async function recomendationVideo(id, typeData){
+    const container = document.getElementById('containerRecomendationVideo');
+    const respon = await getApi(id+'/recommendations', typeData, '&certification_country=US&certification.lte=G&sort_by=popularity.desc&with_genres=16')
+    let uiCardsRecomendation =  ``;
+    respon.results.forEach(data => {
+        const ui = `<div class="flex-none w-1/6">
+                <div class="w-full aspect-2/3">
+                    <img src="https://image.tmdb.org/t/p/original${data.poster_path}" class="w-full h-full object-cover rounded-xl" alt="">
+                </div>
+                <div class="flex h-3 justify-between mx-1 mt-1">    
+                    <div class="flex">
+                        <img src="img/star-f.png" alt="" class="w-3 h-3 mr-1" loading="lazy">
+                        <p class="leading-none text-sm">${data.vote_average.toFixed(2)}</p>
+                    </div>
+                    <div class="flex">
+                        <img src="img/fire.png" class="h-4 w-4 ml-3 -mt-0.5" alt="">
+                        <p class="leading-none text-sm">${data.popularity}</p>
+                    </div>
+                </div>
+            </div>`
+        uiCardsRecomendation += ui;
+    })
+    container.previousElementSibling.textContent = `Recomendations ${typeData} for you`
+    container.innerHTML += uiCardsRecomendation;
+} 
+async function similarVideo(id, typeData){
+    const container = document.getElementById('containerSimilarVideo');
+    const respon = await getApi(id+'/similar', typeData, '&certification_country=US&certification.lte=G&sort_by=popularity.desc&with_genres=16')
+    
+    let uiCardsSimilar =  ``;
+    respon.results.forEach(data => {
+        const ui = `<div class="flex-none w-1/6">
+                <div class="w-full aspect-2/3">
+                    <img src="https://image.tmdb.org/t/p/original${data.poster_path}" class="w-full h-full object-cover rounded-xl" alt="">
+                </div>
+                <div class="flex h-3 justify-between mx-1 mt-1">    
+                    <div class="flex">
+                        <img src="img/star-f.png" alt="" class="w-3 h-3 mr-1" loading="lazy">
+                        <p class="leading-none text-sm">${data.vote_average.toFixed(2)}</p>
+                    </div>
+                    <div class="flex">
+                        <img src="img/fire.png" class="h-4 w-4 ml-3 -mt-0.5" alt="">
+                        <p class="leading-none text-sm">${data.popularity}</p>
+                    </div>
+                </div>
+            </div>`
+        uiCardsSimilar += ui;
+    })
+    container.previousElementSibling.textContent = `Similar ${typeData} for you`
+    container.innerHTML += uiCardsSimilar;
+} 
 
 function swapContentOnSeason(item){
     const siblings = item.parentElement.children
@@ -220,9 +275,9 @@ function loadUiHome(data, typeData){
     function uiGenre(values){
         return values.map((e,i) => {
             if(values[i+1] != undefined){
-                return `<p class="text-sm text-white">${e}</p> <div class="w-[2px] h-4 bg-white"></div>`
+                return `<p class="text-xs sm:text-sm text-white">${e}</p> <div class="w-[2px] h-4 bg-white"></div>`
             }else{
-                return `<p class="text-sm text-white">${e}</p>`
+                return `<p class="text-xs sm:text-sm text-white">${e}</p>`
             }
         }).join('');
     }
@@ -232,9 +287,9 @@ function loadUiHome(data, typeData){
         <div class="flex flex-col gap-1 px-4 text-white">
             <button class="w-16 h-6.5 rounded-xl bg-gray-800 text-white text-sm">${typeData}</button>
             <h1 class="mt-4 text-4xl font-bold">${data.title || data.name}</h1>
-            <ul class="mt-3 flex gap-5.5 text-sm">
-                <li class="">${firstList || ''} </li>
-                <li class="${firstList === '' ? '' : 'list-disc'    }">${data.release_date || data.last_air_date}</li>
+            <ul class="mt-3 flex flex-col  gap-1 sm:gap-5.5 text-xs sm:text-sm">
+                <li class="whitespace-nowrap">${firstList || ''} </li>
+                <li class="${firstList === '' ? '' : 'list-disc'} whitespace-nowrap">${data.release_date || data.last_air_date}</li>
                 <li class="before:content-['•'] before:mr-2 before:text-lg before:leading-0 flex gap-1.5 items-center">${uiGenre(genre)}</li>
             </ul>
             <div class="mt-2">
@@ -374,6 +429,12 @@ function videoNotFound(type){
     },3000)
 }
 
+function stopVideo(){
+    setTimeout(() => {
+        document.getElementById('contentModal').innerHTML = ''; 
+    }, 200)
+}
+
 function sharePage(){
     if(navigator.share){
         navigator.share({
@@ -386,9 +447,10 @@ function sharePage(){
     }
 }
 
-function getApi(id, type){
+function getApi(id, type, query){
     const typeData = (type == 'series') ? 'tv' : 'movie';
-    let url =`https://api.themoviedb.org/3/${typeData}/${id}?api_key=8482e16292527bd819173faa9e3fb365` ;
+    const overQuery = (query == undefined) ? '' : query;
+    let url =`https://api.themoviedb.org/3/${typeData}/${id}?api_key=8482e16292527bd819173faa9e3fb365${overQuery}` ;
     return fetch(url)
     .then(e => e.json())
     .then(e => (e.length===0)?'Movie Not Found' : e);
