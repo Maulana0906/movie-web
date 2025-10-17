@@ -63,7 +63,7 @@
 </div>
 
 <!-- container home -->
-<div class="w-full h-screen relative" id="containerHome">
+<div class="w-full h-screen relative " id="containerHome">
     <div class="w-full h-full absolute" id="coloring"></div>
 </div>
 
@@ -71,9 +71,7 @@
 <div class="w-full flex flex-col px-4 mt-2">
   <div class="">
     <h1 class="font-semibold text-xl">Story Line</h1>
-    <p class="text-sm text-justify" id="storyLine">Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia vero, itaque doloremque voluptatem culpa consequuntur
-      animi laudantium asperiores dolorem a maxime tempore eaque minus ullam earum nihil sint omnis velit,
-      dolor similique consectetur eum. Neque quas amet at facilis commodi.</p>
+    <p class="text-sm text-justify" id="storyLine"></p>
   </div>
   <div class="mt-2 w-full">
     <h1 class="font-semibold text-xl">Cast</h1>
@@ -91,7 +89,7 @@
 
   <div class="w-full mt-3 block " id="contentSeasons">
   </div>
-  <div class="w-full mt-3 hidden gap-2 overflow-x-auto " id="contentReview">
+  <div class="w-full mt-3 hidden gap-2 flex-wrap px-1" id="contentReview">
   </div>
 
 </div>
@@ -151,7 +149,7 @@
 
 <!-- modal video -->
 <dialog id="my_modal_2" class="modal">
-  <div class="modal-box w-11/12 aspect-video max-w-5xl p-0" id="contentModal">
+  <div class="modal-box w-[98%] md:w-11/12 aspect-video max-w-5xl p-0" id="contentModal">
   </div>
   <form method="dialog" class="modal-backdrop">
     <button onclick="clear(), stopVideo()">close</button>

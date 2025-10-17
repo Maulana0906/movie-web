@@ -43,11 +43,13 @@ setTimeout(async ()=> {
 
     // container Home
     const movie = await getApi(idMovie, typeData);
-    const containerHome = document.getElementById('containerHome');
-    const uiContainerHome = loadUiHome(movie, typeData);
+    // const containerHome = document.getElementById('containerHome');
+    // const uiContainerHome = loadUiHome(movie, typeData);
 
-    containerHome.innerHTML += uiContainerHome;
-    document.getElementById('storyLine').innerHTML = movie.overview;
+    // if(containerHome){
+    //     containerHome.innerHTML += uiContainerHome;
+    //     document.getElementById('storyLine').innerHTML = movie.overview;
+    // }
 
     document.addEventListener('click', (el) => {
         if(el.target.classList.contains('btn-home')){
@@ -56,19 +58,19 @@ setTimeout(async ()=> {
     })
 
     // cast
-    loadUiCast(movie.id, typeData);
+    // loadUiCast(movie.id, typeData);
 
     // season series
-    if(typeData === 'series') seasonsOfSeries(movie.seasons)
+    // if(typeData === 'series') seasonsOfSeries(movie.seasons)
     reviewsVideo(idMovie, typeData);
     
     // episode
-    document.addEventListener('click', (el) => {
-        if(el.target.classList.contains('swapSeason')) {
-            const seasonNow = el.target.textContent.split(' ')[1];
-            seasonsOfSeries(movie.seasons, seasonNow)
-        }
-    })    
+    // document.addEventListener('click', (el) => {
+    //     if(el.target.classList.contains('swapSeason')) {
+    //         const seasonNow = el.target.textContent.split(' ')[1];
+    //         seasonsOfSeries(movie.seasons, seasonNow)
+    //     }
+    // })    
 
     // replace content on season section
     document.addEventListener('click', el => {
@@ -80,8 +82,8 @@ setTimeout(async ()=> {
         }
     })
 
-    similarVideo(idMovie,typeData);
-    recomendationVideo(idMovie,typeData);
+    // similarVideo(idMovie,typeData);
+    // recomendationVideo(idMovie,typeData);
 
 },0)
 
@@ -151,6 +153,7 @@ function swapContentOnSeason(item){
     sibling[0].classList.remove('activeContent');
     item.classList.add('activeContent');
 
+    if(item.textContent == 'Reviews') checkReviewsVideo();
 }
 
 async function reviewsVideo(id, type){
@@ -161,16 +164,44 @@ async function reviewsVideo(id, type){
                     .then(e => e.json()).then(e => e.results);
     let cardreviews = ``;
     respon.forEach(data => {
-        const iconProfile = (data.author_details.avatar_path == null) ? `<i class="fa fa-user px-2.5 py-2 border-2 border-gray-500 text-gray-500 rounded-full" aria-hidden="true"></i>` : ` <img class="w-1/4 aspect-square rounded-full mx-auto" src="https://image.tmdb.org/t/p/original${data.author_details.avatar_path}">`
-        const uiCard = ` <div class="flex-none w-1/8 p-1 text-center">
-        ${iconProfile}
+        const srcIconProfile = (data.author_details.avatar_path == null) ? '../img/profile-picture.png' : `https://image.tmdb.org/t/p/original${data.author_details.avatar_path}`;
+        const uiCard = ` <div class="relative flex-none w-[calc(16.666%-8px)] bg-slate-200 rounded-md h-40 p-1 text-center">
+        <img class="w-1/4 aspect-square rounded-full mx-auto" src="${srcIconProfile}">
         <h2 class="text-sm font-semibold">${data.author}</h2>
-        <p class="text-2xs text-justify">"${data.content}"</p>
+        <div class="h-[48%] overflow-hidden"> 
+            <p class="text-2xs leading-3.5 text-justify text-review">"${data.content}"</p>
+        </div>
+        <p class="leading-2 text-xs text-start tracking-wider hidden detail-review-video">....
+            <button class="underline text-2xs text-blue-600 cursor-pointer onclick="my_modal_3.showModal()">Detail </button>
+        </p>
       </div>`
-      cardreviews += uiCard
+      cardreviews += uiCard;
     })
-
+    
+    const modalReview = document.getElementById('my_modal_3');
+    console.log(modalReview)
+    const uiModalReview = `<div class="modal-box">
+                            <form method="dialog">
+                            <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+                            </form>
+                            <h3 class="text-lg font-bold">Hello!</h3>
+                            <p class="py-4">Press ESC key or click on ✕ button to close</p>
+                        </div>`;
+     
     container.innerHTML +=cardreviews;
+    modalReview.innerHTML += uiModalReview;
+}
+
+function checkReviewsVideo(){
+    const container = document.getElementById('contentReview');
+    console.log(container)
+    const elements = container.querySelectorAll('.text-review');
+    const detailReview = container.querySelectorAll('.detail-review-video');
+       Array.from(elements).forEach((el,i) => {
+        const totalLine = Math.round(el.clientHeight / parseFloat(window.getComputedStyle(el).lineHeight));
+        console.log(el.clientHeight)
+        if(totalLine>4) detailReview[i].classList.remove('hidden');
+    })
 }
 
 async function seasonsOfSeries(data, season){
@@ -242,13 +273,13 @@ async function loadUiCast(id, type){
     const cast = respon.cast;
     const containerCast = document.getElementById('containerCast')
     let cardCasts = ``;
-    const uiCard = (data) => `<div class="flex-none w-[16.6%] h-20 flex items-center gap-1.5">
+    const uiCard = (data) => `<div class="flex-none w-[calc(16.6%-3px)] h-20 flex items-center gap-1.5">
                   <div class="w-[30%] aspect-1/1">
                     <img src="https://image.tmdb.org/t/p/original${data.profile_path}" class=" w-full h-full object-cover rounded-full" alt="">
                   </div>
-                  <div class="w-[70%]">
-                    <h1 class="text-md font-semibold">${data.name}</h1>
-                    <p class="text-xs">${data.character || data.job}</p>
+                  <div class="w-[70%] h-full flex flex-col justify-center">
+                    <h1 class="text-md font-semibold original-name">${data.name}</h1>
+                    <p class="text-[11px] leading-3.5 role">${data.character || data.job}</p>
                   </div>
                 </div>`;
     if(cast.length == 0){
@@ -258,9 +289,31 @@ async function loadUiCast(id, type){
     }
 
     containerCast.innerHTML += cardCasts;
+    checkCardCast(containerCast);
+    
+}
+
+function checkCardCast(container){
+    const cardCast = container.children;
+    Array.from(cardCast).forEach(el => {
+        const name = el.querySelector('.original-name');
+        const totalLineName = Math.round(name.clientHeight / parseFloat(window.getComputedStyle(name).lineHeight));
+
+        const role = el.querySelector('.role');
+        const totalLineRole = Math.round(role.clientHeight / parseFloat(window.getComputedStyle(role).lineHeight));
+
+        if(totalLineName>1){
+            name.classList.add('leading-4')        
+        } else if(totalLineName>1 && totalLineRole>1){
+            name.classList.add('leading-4 text-sm')            
+            role.classList.add('leading-3 text-2xs')            
+        }    
+    })
 }
 
 function loadUiHome(data, typeData){
+    console.log(data)
+    const storyLine = document.getElementById('storyLine');
     let firstList = '';
     if(typeData == 'series'){
         firstList = (data.seasons == 'undefined') ? data.times : data.seasons[data.seasons.length-1].name;
@@ -281,65 +334,92 @@ function loadUiHome(data, typeData){
             }
         }).join('');
     }
+    storyLine.textContent += data.overview;
     const genre = findGenre(data.genres)
     return `<img src="https://image.tmdb.org/t/p/original${data.backdrop_path}" class="h-full w-full object-cover" alt="">
-    <div class="absolute w-full h-1/3 bottom-0 z-10 grid grid-cols-2 gap-1">
-        <div class="flex flex-col gap-1 px-4 text-white">
+    <div class="absolute w-full h-1/3 bottom-0 z-10 grid md:grid-cols-2 gap-1">
+        <div class="relative w-full flex flex-col justify-end gap-1 px-4 pb-3.5 text-white" id="partOfContainerHome">
             <button class="w-16 h-6.5 rounded-xl bg-gray-800 text-white text-sm">${typeData}</button>
-            <h1 class="mt-4 text-4xl font-bold">${data.title || data.name}</h1>
-            <ul class="mt-3 flex flex-col  gap-1 sm:gap-5.5 text-xs sm:text-sm">
-                <li class="whitespace-nowrap">${firstList || ''} </li>
-                <li class="${firstList === '' ? '' : 'list-disc'} whitespace-nowrap">${data.release_date || data.last_air_date}</li>
-                <li class="before:content-['•'] before:mr-2 before:text-lg before:leading-0 flex gap-1.5 items-center">${uiGenre(genre)}</li>
+            <h1 class="mt-1 md:mt-4 text-4xl font-bold">${data.title || data.name}</h1>
+            <ul class="mt-3 w-full flex flex-wrap md:flex-nowrap gap-x-5.5 text-xs sm:text-sm">
+                <li class="w-auto whitespace-nowrap">${firstList || ''} </li>
+                <li class="w-1/2 md:w-auto ${firstList === '' ? '' : 'list-disc'} whitespace-nowrap">${data.release_date || data.last_air_date}</li>
+                <li class="w-full md:w-auto md:before:content-['•'] md:before:mr-2 md:before:text-lg md:before:leading-0 flex gap-1.5 items-center">${uiGenre(genre)}</li>
             </ul>
             <div class="mt-2">
-                <button class="text-sm px-3 py-[9px] rounded-lg bg-green-700 mr-5 cursor-pointer btn-home">
+                <button class="text-sm w-[55%] lg:w-[35%] py-[9px] rounded-lg bg-green-700 mr-2 lg:mr-5 cursor-pointer btn-home whitespace-nowrap" id="continueWacthing">
                     <i class="fa fa-play-circle" aria-hidden="true"></i> Continue Wacthing
                 </button>
-                <button class="text-sm px-3 py-2 rounded-lg border-white border-[1px] cursor-pointer btn-home">
+                <button class="hidden md:inline-block text-sm w-[40%] lg:w-[28%] py-2 rounded-lg border-white border-[1px] cursor-pointer btn-home whitespace-nowrap" id="addWacthlist">
                     <i class="fa fa-bookmark-o" aria-hidden="true"></i> Add Wacthlist
+                </button>
+                <button class="md:hidden mr-2 text-sm w-[23%] py-2 rounded-lg border-gray-500 border-[1px] cursor-pointer btn-home whitespace-nowrap" id="like">
+                  <i class="fa fa-thumbs-o-up w-3" aria-hidden="true"></i> Like
+                </button>
+                <button class="md:hidden text-sm w-[13%] py-2 rounded-lg border-gray-500 border-[1px] cursor-pointer " onclick="detailButtons(this)">
+                  <i class="fa fa-caret-up" aria-hidden="true"></i>
                 </button>
             </div>
         </div>
-        <div class="text-white flex justify-end items-end py-3.5 px-4 gap-3">
-             <button class="text-sm px-7 py-2 rounded-lg border-[1px] border-gray-500 cursor-pointer btn-home" data-link='${data.backdrop_path}' data-title='${data.title}'>
+        <div class="hidden md:flex text-white justify-end items-end py-3.5 px-4 gap-3">
+             <button class="text-sm w-[31%] lg:w-[20%] py-2 rounded-lg border-[1px] border-gray-500 cursor-pointer btn-home whitespace-nowrap" id="download" data-link='${data.backdrop_path}' data-title='${data.title}'>
                   <i class="fa fa-download" aria-hidden="true"></i> Download
                 </button>
-              <button class="text-sm px-10 py-2 rounded-lg border-gray-500 border-[1px] cursor-pointer btn-home">
+              <button class="text-sm w-[31%] lg:w-[20%] py-2 rounded-lg border-gray-500 border-[1px] cursor-pointer btn-home whitespace-nowrap" id="share">
                   <i class="fa fa-share-alt" aria-hidden="true"></i> Share
               </button>
-              <button class="text-sm px-10 py-2 rounded-lg border-gray-500 border-[1px] cursor-pointer btn-home">
+              <button class="text-sm w-[31%] lg:w-[20%] py-2 rounded-lg border-gray-500 border-[1px] cursor-pointer btn-home whitespace-nowrap" id="like">
                   <i class="fa fa-thumbs-o-up w-3" aria-hidden="true"></i> Like
               </button>
         </div>
     </div>`
 }
 function handleButton(btn){
-    const btnHome = document.querySelectorAll('.btn-home');
-    const findBtn = Array.from(btnHome).indexOf(btn);
+    const findBtn = btn.id;
     const icon = btn.children[0];
 
     switch(findBtn){
-        case 0 :
+        case 'continueWacthing' :
             wacthingMovie();
             break;
-        case 1 :
+        case 'addWacthlist' :
             icon.classList.toggle('fa-bookmark-o');
             icon.classList.toggle('fa-bookmark');
             break;
-        case 2 :
+        case 'download' :
             const link = btn.dataset.link;
             const title = btn.dataset.title;
             // downloadImg(link, title)
             break;
-        case 3 :
+        case 'share':
             sharePage();
             break;
-        case 4 :
+        case 'like' :
             icon.classList.toggle('fa-thumbs-o-up');
             icon.classList.toggle('fa-thumbs-up');
             break;
 
+    }
+}
+function detailButtons(button){
+    const containerHome = document.getElementById('partOfContainerHome');
+    const ui = `<div class="w-1/3 py-2 rounded-lg absolute bottom-1/4 right-2 z-50 text-center detailButtonsOnDetailMovie">  
+                <button class="text-2xs w-10/12 py-1 rounded-lg bg-gray-500 cursor-pointer btn-home whitespace-nowrap" id="addWacthlist">
+                    <i class="fa fa-bookmark-o" aria-hidden="true"></i> Add Wacthlist
+                </button>
+                <button class="text-2xs mt-1 w-10/12 py-1 rounded-lg bg-gray-500 cursor-pointer btn-home whitespace-nowrap" id="download">
+                    <i class="fa fa-download" aria-hidden="true"></i> Download
+                </button>
+                <button class="text-2xs mt-1 w-10/12 py-1 rounded-lg bg-gray-500 cursor-pointer btn-home whitespace-nowrap" id="share">
+                    <i class="fa fa-share-alt" aria-hidden="true"></i> Share
+                </button>
+        </div>`;
+    if(button.classList.contains('active')){
+       button.classList.remove('active')
+       containerHome.querySelector('.detailButtonsOnDetailMovie').remove();
+    }else{
+        button.classList.add('active')
+        containerHome.innerHTML += ui;
     }
 }
 // masih belum ketemu solusi nya
