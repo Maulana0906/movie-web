@@ -86,7 +86,7 @@ setTimeout(async ()=> {
     // recomendationVideo(idMovie,typeData);
 
 },0)
-
+// primary content
 async function recomendationVideo(id, typeData){
     const container = document.getElementById('containerRecomendationVideo');
     const respon = await getApi(id+'/recommendations', typeData, '&certification_country=US&certification.lte=G&sort_by=popularity.desc&with_genres=16')
@@ -139,6 +139,7 @@ async function similarVideo(id, typeData){
     container.innerHTML += uiCardsSimilar;
 } 
 
+// About Season
 function swapContentOnSeason(item){
     const siblings = item.parentElement.children
     const sibling = Array.from(siblings).filter(e => e!=item)
@@ -156,6 +157,7 @@ function swapContentOnSeason(item){
     if(item.textContent == 'Reviews') checkReviewsVideo();
 }
 
+// About reviews
 async function reviewsVideo(id, type){
     const typeData = type == 'series' ? 'tv' : 'movie'
     const container = document.getElementById('contentReview');
@@ -165,45 +167,59 @@ async function reviewsVideo(id, type){
     let cardreviews = ``;
     respon.forEach(data => {
         const srcIconProfile = (data.author_details.avatar_path == null) ? '../img/profile-picture.png' : `https://image.tmdb.org/t/p/original${data.author_details.avatar_path}`;
-        const uiCard = ` <div class="relative flex-none w-[calc(16.666%-8px)] bg-slate-200 rounded-md h-40 p-1 text-center">
-        <img class="w-1/4 aspect-square rounded-full mx-auto" src="${srcIconProfile}">
+        const uiCard = ` <div class="relative flex-none w-[calc(50%-4px)] sm:w-[calc(33.33%-8px)] md:1/4 lg:w-[calc(16.666%-8px)] bg-slate-200 rounded-md h-40 p-1 text-center">
+        <img class="w-1/4 sm:w-1/6 lg:w-1/4 aspect-square rounded-full mx-auto" src="${srcIconProfile}">
         <h2 class="text-sm font-semibold">${data.author}</h2>
-        <div class="h-[48%] overflow-hidden"> 
+        <div class="h-[48%] overflow-hidden px-0.5"> 
             <p class="text-2xs leading-3.5 text-justify text-review">"${data.content}"</p>
         </div>
         <p class="leading-2 text-xs text-start tracking-wider hidden detail-review-video">....
-            <button class="underline text-2xs text-blue-600 cursor-pointer onclick="my_modal_3.showModal()">Detail </button>
+            <button class="underline text-2xs text-blue-600 cursor-pointer" data-img="${srcIconProfile}" data-author="${data.author}" data-content="${data.content}" onclick="openModalReview(this)">Detail </button>
         </p>
       </div>`
       cardreviews += uiCard;
     })
-    
+    container.innerHTML +=cardreviews;
+}
+function openModalReview(btn){
+    const img = btn.dataset.img;
+    const author = btn.dataset.author;
+    const content = btn.dataset.content;
     const modalReview = document.getElementById('my_modal_3');
-    console.log(modalReview)
     const uiModalReview = `<div class="modal-box">
                             <form method="dialog">
-                            <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+                            <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" onclick="clearModalReview()">✕</button>
                             </form>
-                            <h3 class="text-lg font-bold">Hello!</h3>
-                            <p class="py-4">Press ESC key or click on ✕ button to close</p>
+                            <img class="w-1/8 aspect-square rounded-full mx-auto" src="${img}">
+                            <h2 class="text-sm text-center font-semibold">${author}</h2>
+                            <div class="h-full overflow-hidden"> 
+                                <p class="text-2xs leading-3.5 text-justify">"${content}"</p>
+                            </div>
                         </div>`;
      
-    container.innerHTML +=cardreviews;
     modalReview.innerHTML += uiModalReview;
+    modalReview.showModal();
 }
-
+function clearModalReview(){
+    setTimeout(() => {
+        const modalReview = document.getElementById('my_modal_3');
+        modalReview.innerHTML ='';
+    }, 50)
+}
 function checkReviewsVideo(){
     const container = document.getElementById('contentReview');
-    console.log(container)
+    const bottomContainer = container.getBoundingClientRect().bottom;
+
     const elements = container.querySelectorAll('.text-review');
     const detailReview = container.querySelectorAll('.detail-review-video');
        Array.from(elements).forEach((el,i) => {
-        const totalLine = Math.round(el.clientHeight / parseFloat(window.getComputedStyle(el).lineHeight));
-        console.log(el.clientHeight)
-        if(totalLine>4) detailReview[i].classList.remove('hidden');
+        const bottomElement = el.getBoundingClientRect().bottom;
+        console.log(bottomContainer, bottomElement)
+        if(bottomElement > bottomContainer) detailReview[i].classList.remove('hidden');
     })
 }
 
+// About Seasons
 async function seasonsOfSeries(data, season){
     const containerContentSeasons = document.getElementById('contentSeasons');
     const seasons = data.map(e => ({name : e.name, episode_count : e.episode_count}));
@@ -244,7 +260,6 @@ async function seasonsOfSeries(data, season){
     </div>`;
     containerContentSeasons.innerHTML = ui;
 }
-
 async function epsiodeInSeries(data){
     const url = new URLSearchParams(window.location.search);
     const idMovie = url.get('id');  
@@ -264,6 +279,7 @@ async function epsiodeInSeries(data){
     return [respon, stringEpisode]
 }
 
+// About Cast
 async function loadUiCast(id, type){
     const typeData = (type == 'series') ? 'tv' : 'movie';
     const respon = await fetch(`https://api.themoviedb.org/3/${typeData }/${id}/credits?api_key=8482e16292527bd819173faa9e3fb365`)
@@ -273,13 +289,13 @@ async function loadUiCast(id, type){
     const cast = respon.cast;
     const containerCast = document.getElementById('containerCast')
     let cardCasts = ``;
-    const uiCard = (data) => `<div class="flex-none w-[calc(16.6%-3px)] h-20 flex items-center gap-1.5">
-                  <div class="w-[30%] aspect-1/1">
-                    <img src="https://image.tmdb.org/t/p/original${data.profile_path}" class=" w-full h-full object-cover rounded-full" alt="">
+    const uiCard = (data) => `<div class="flex-none w-1/3 sm:w-1/4 lg:w-[calc(16.6%-3px)] h-min-20 flex flex-col md:flex-row items-center gap-1.5">
+                  <div class="flex-none w-[50%] md:w-[30%]">
+                    <img src="https://image.tmdb.org/t/p/original${data.profile_path}" class=" w-full aspect-1/1 object-cover rounded-full" alt="">
                   </div>
-                  <div class="w-[70%] h-full flex flex-col justify-center">
-                    <h1 class="text-md font-semibold original-name">${data.name}</h1>
-                    <p class="text-[11px] leading-3.5 role">${data.character || data.job}</p>
+                  <div class="w-full md:w-[70%] h-full flex flex-col justify-center text-center md:text-start">
+                    <h1 class="text-xs md:text-md font-semibold original-name">${data.name}</h1>
+                    <p class="text-[9px] md:text-[11px] leading-3.5 role">${data.character || data.job}</p>
                   </div>
                 </div>`;
     if(cast.length == 0){
@@ -311,6 +327,7 @@ function checkCardCast(container){
     })
 }
 
+// Home Content
 function loadUiHome(data, typeData){
     console.log(data)
     const storyLine = document.getElementById('storyLine');
@@ -451,7 +468,6 @@ async function wacthingMovie(){
     }
 
 }
-
 async function checkTrailerMovie(data){
     if(data.length == 0) return false
 
@@ -480,7 +496,6 @@ async function checkTrailerMovie(data){
     return result;
 
 }
-
 function wacthVideoInAlert(key){
     const alert = `<iframe
         class="w-full h-full"
@@ -493,7 +508,6 @@ function wacthVideoInAlert(key){
     document.getElementById('contentModal').innerHTML = alert; 
     my_modal_2.showModal()
 }
-
 function videoNotFound(type){
     const typeData = type == 'series' ? 'Series' : 'Movie'
     const alert = ` <div class="h-9% w-4"></div>
@@ -508,13 +522,11 @@ function videoNotFound(type){
         document.getElementById('alertVideoNotFound').innerHTML = '';
     },3000)
 }
-
 function stopVideo(){
     setTimeout(() => {
         document.getElementById('contentModal').innerHTML = ''; 
     }, 200)
 }
-
 function sharePage(){
     if(navigator.share){
         navigator.share({
@@ -527,6 +539,7 @@ function sharePage(){
     }
 }
 
+// Fetch API
 function getApi(id, type, query){
     const typeData = (type == 'series') ? 'tv' : 'movie';
     const overQuery = (query == undefined) ? '' : query;

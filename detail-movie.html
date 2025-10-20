@@ -68,20 +68,20 @@
 </div>
 
 <!-- second section -->
-<div class="w-full flex flex-col px-4 mt-2">
+<div class="w-full flex flex-col px-2 md:px-4 mt-2">
   <div class="">
     <h1 class="font-semibold text-xl">Story Line</h1>
     <p class="text-sm text-justify" id="storyLine"></p>
   </div>
   <div class="mt-2 w-full">
     <h1 class="font-semibold text-xl">Cast</h1>
-      <div class="w-full h-24 flex gap-1 overflow-x-auto overflow-y-hidden" id="containerCast">
+      <div class="w-full flex gap-1 overflow-x-auto py-1.5" id="containerCast">
       </div>
   </div>
 </div>
 
 <!-- third section -->
-<div class="mt-5 px-4 w-full">
+<div class="mt-5 px-2 md:px-4 w-full">
   <ul class="flex gap-3">
     <li class="text-sm text-blue-900 cursor-pointer activeContent swapContentOnSeason">Episode</li>
     <li class="text-sm text-blue-900 cursor-pointer swapContentOnSeason">Reviews</li>
@@ -89,7 +89,7 @@
 
   <div class="w-full mt-3 block " id="contentSeasons">
   </div>
-  <div class="w-full mt-3 hidden gap-2 flex-wrap px-1" id="contentReview">
+  <div class="w-full mt-3 hidden gap-2 flex-wrap lg:px-1" id="contentReview">
   </div>
 
 </div>
@@ -156,6 +156,9 @@
   </form>
 </dialog>
 
+<!-- modal Review -->
+<dialog id="my_modal_3" class="modal">
+</dialog>
 <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
     <script src="src/detail-movie.js"></script>
 </body>
