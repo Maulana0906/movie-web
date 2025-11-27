@@ -37,19 +37,21 @@ const videoPriority = [
 
 
 setTimeout(async ()=> {
+    skeletonLoadCards();
+
     const url = new URLSearchParams(window.location.search);
     const idMovie = url.get('id');
     const typeData = url.get('typeData');
 
     // container Home
     const movie = await getApi(idMovie, typeData);
-    // const containerHome = document.getElementById('containerHome');
-    // const uiContainerHome = loadUiHome(movie, typeData);
+    const containerHome = document.getElementById('containerHome');
+    const uiContainerHome = loadUiHome(movie, typeData);
 
-    // if(containerHome){
-    //     containerHome.innerHTML += uiContainerHome;
-    //     document.getElementById('storyLine').innerHTML = movie.overview;
-    // }
+    if(containerHome){
+        containerHome.innerHTML += uiContainerHome;
+        document.getElementById('storyLine').innerHTML = movie.overview;
+    }
 
     document.addEventListener('click', (el) => {
         if(el.target.classList.contains('btn-home')){
@@ -61,16 +63,16 @@ setTimeout(async ()=> {
     // loadUiCast(movie.id, typeData);
 
     // season series
-    // if(typeData === 'series') seasonsOfSeries(movie.seasons)
-    reviewsVideo(idMovie, typeData);
+    if(typeData === 'series') seasonsOfSeries(movie.seasons);
+    // reviewsVideo(idMovie, typeData);
     
     // episode
-    // document.addEventListener('click', (el) => {
-    //     if(el.target.classList.contains('swapSeason')) {
-    //         const seasonNow = el.target.textContent.split(' ')[1];
-    //         seasonsOfSeries(movie.seasons, seasonNow)
-    //     }
-    // })    
+    document.addEventListener('click', (el) => {
+        if(el.target.classList.contains('swapSeason')) {
+            const seasonNow = el.target.textContent.split(' ')[1];
+            seasonsOfSeries(movie.seasons, seasonNow)
+        }
+    })    
 
     // replace content on season section
     document.addEventListener('click', el => {
@@ -84,15 +86,16 @@ setTimeout(async ()=> {
 
     // similarVideo(idMovie,typeData);
     // recomendationVideo(idMovie,typeData);
-
+    
 },0)
 // primary content
 async function recomendationVideo(id, typeData){
     const container = document.getElementById('containerRecomendationVideo');
     const respon = await getApi(id+'/recommendations', typeData, '&certification_country=US&certification.lte=G&sort_by=popularity.desc&with_genres=16')
     let uiCardsRecomendation =  ``;
-    respon.results.forEach(data => {
-        const ui = `<div class="flex-none w-1/6">
+    respon.results.forEach((data, i) => {
+        if(i < 12){
+        const ui = `<div class="flex-none md:w-[calc(25%-8px)] mx-[4px] lg:w-[calc(16.666%-8px)] sm:w-[calc(33.333%-8px)] w-[calc(50%-8px)]">
                 <div class="w-full aspect-2/3">
                     <img src="https://image.tmdb.org/t/p/original${data.poster_path}" class="w-full h-full object-cover rounded-xl" alt="">
                 </div>
@@ -108,8 +111,10 @@ async function recomendationVideo(id, typeData){
                 </div>
             </div>`
         uiCardsRecomendation += ui;
+        }
     })
-    container.previousElementSibling.textContent = `Recomendations ${typeData} for you`
+    container.innerHTML = '';
+    container.parentElement.children[0].textContent = `Recomendations ${typeData} for you`;
     container.innerHTML += uiCardsRecomendation;
 } 
 async function similarVideo(id, typeData){
@@ -117,8 +122,9 @@ async function similarVideo(id, typeData){
     const respon = await getApi(id+'/similar', typeData, '&certification_country=US&certification.lte=G&sort_by=popularity.desc&with_genres=16')
     
     let uiCardsSimilar =  ``;
-    respon.results.forEach(data => {
-        const ui = `<div class="flex-none w-1/6">
+    respon.results.forEach((data, i) => {
+        if(i < 12){
+        const ui = `<div class="flex-none md:w-[calc(25%-8px)] mx-[4px] lg:w-[calc(16.666%-8px)] sm:w-[calc(33.333%-8px)] w-[calc(50%-8px)]">
                 <div class="w-full aspect-2/3">
                     <img src="https://image.tmdb.org/t/p/original${data.poster_path}" class="w-full h-full object-cover rounded-xl" alt="">
                 </div>
@@ -134,10 +140,64 @@ async function similarVideo(id, typeData){
                 </div>
             </div>`
         uiCardsSimilar += ui;
+        }
     })
-    container.previousElementSibling.textContent = `Similar ${typeData} for you`
+    container.innerHTML = '';
+    container.parentElement.children[0].textContent = `Similar ${typeData} for you`
     container.innerHTML += uiCardsSimilar;
 } 
+let scrollListener = [null, null, null];
+function handleBtnArrow(btn){
+    const arrowType = btn.dataset.arrow;
+    const i = btn.dataset.number;
+    const container = btn.parentElement.children[2];
+    const sibling = arrowType === "right" ? btn.parentElement.children[1] : btn.parentElement.children[3];
+
+    container.scrollLeft += (arrowType == "right") ? container.clientWidth : -container.clientWidth;
+    sibling.classList.replace('hidden', 'absolute')
+
+    let scrollTimeOut;
+    if (scrollListener[i]) container.removeEventListener("scroll", scrollListener[i]);
+    
+    scrollListener[i] = function() {
+        clearTimeout(scrollTimeOut);
+        scrollTimeOut = setTimeout(() => {
+            cekPosisiScroll(btn, container);
+        }, 120);
+    };
+
+    container.addEventListener("scroll", scrollListener[i]);
+
+    function cekPosisiScroll(button, container){
+        if(container.scrollWidth - (container.scrollLeft + container.clientWidth ) <= 2 || container.scrollLeft === 0){
+            button.classList.replace('absolute', 'hidden');
+        }
+    }
+    
+}
+
+// skeleton load
+function skeletonLoadCards(){
+    let uiCards = ``;
+    const containerSimilar = document.getElementById('containerSimilarVideo');
+    const containerRecomendation = document.getElementById('containerRecomendationVideo');
+
+    for(let i=0; i<6; i++){
+        uiCards +=`<div class="flex-none md:w-[calc(25%-8px)] mx-[4px] lg:w-[calc(16.666%-8px)] sm:w-[calc(33.333%-8px)] w-[calc(50%-8px)] aspect-3/4 skeleton"> </div>`
+    }
+
+    containerSimilar.innerHTML += uiCards;
+    containerRecomendation.innerHTML += uiCards;
+}
+function skeletonLoadEpisode(){
+    let ui = ``;
+    const container = document.getElementById('contentSeasons');
+
+    for(let i=0; i<4; i++){
+        ui += `<div class="flex-none w-[calc(50%-11px)] sm:w-[calc(33.33%-11px)] lg:w-[calc(25%-11px)] aspect-video rounded-xl skeleton"> </div>`
+    }
+    container.innerHTML += `<div class="w-full flex gap-3">${ui}</div>`;
+}
 
 // About Season
 function swapContentOnSeason(item){
@@ -179,6 +239,8 @@ async function reviewsVideo(id, type){
       </div>`
       cardreviews += uiCard;
     })
+    if(cardreviews === '') cardreviews = `<h1 class="text-xl font-bold text-gray-400"> Belum ada review </h1>`
+    
     container.innerHTML +=cardreviews;
 }
 function openModalReview(btn){
@@ -208,13 +270,12 @@ function clearModalReview(){
 }
 function checkReviewsVideo(){
     const container = document.getElementById('contentReview');
-    const bottomContainer = container.getBoundingClientRect().bottom;
-
+    
     const elements = container.querySelectorAll('.text-review');
     const detailReview = container.querySelectorAll('.detail-review-video');
-       Array.from(elements).forEach((el,i) => {
+    Array.from(elements).forEach((el,i) => {
+        const bottomContainer = container.children[i].getBoundingClientRect().bottom;
         const bottomElement = el.getBoundingClientRect().bottom;
-        console.log(bottomContainer, bottomElement)
         if(bottomElement > bottomContainer) detailReview[i].classList.remove('hidden');
     })
 }
@@ -222,61 +283,98 @@ function checkReviewsVideo(){
 // About Seasons
 async function seasonsOfSeries(data, season){
     const containerContentSeasons = document.getElementById('contentSeasons');
-    const seasons = data.map(e => ({name : e.name, episode_count : e.episode_count}));
-    const seasonNow = (season == undefined) ? {name :seasons[0].name, episode_count : seasons[0].episode_count} : {name : seasons[season-1].name,  episode_count : seasons[season-1].episode_count};
-    const uiDropdown = seasons.map(e => `<li><a class="whitespace-nowrap swapSeason">${e.name}</a></li>`).join('');
+    containerContentSeasons.innerHTML = '';
+    skeletonLoadEpisode();
+    const numberSeason = (season == undefined) ? data[0].season_number : season;
+    const seasons = data.map(e => ({id : e.season_number, episode_count : e.episode_count})); 
+
+    function checkSeasonNow(value, number, specialSeason){
+        let temp = value.find(e => e.id == number);
+        if(temp.id == 0) temp.id = specialSeason ;
+        return temp;
+    }
+    const seasonNow = checkSeasonNow(seasons, numberSeason, data[0].name);
+    const uiDropdown = seasons.map(e => `<li><a class="whitespace-nowrap swapSeason">Seasons ${e.id == 0 ? data[0].name : e.id}</a></li>`).join('');
     const episodeOnSeasonNow = await epsiodeInSeries(seasonNow);
 
     let cardsEpisode = ``;
-
     episodeOnSeasonNow[0].forEach(data => {
-        const uiCardEpisode = ` <div class="flex-none w-1/4 aspect-video rounded-xl bg-black relative cursor-pointer">
+        const uiCardEpisode = ` <div class="flex-none snap-start w-[calc(50%-11px)] sm:w-[calc(33.33%-11px)] lg:w-[calc(25%-11px)] aspect-video rounded-xl bg-black relative cursor-pointer">
         <img src="https://image.tmdb.org/t/p/original${data.still_path}" class="w-full h-full object-cover rounded-xl opacity-80" alt="">
-        <div class="w-full h-full absolute bottom-0 rounded-xl flex justify-center items-center text-6xl" id="coloring">
+        <div class="w-full h-full absolute bottom-0 rounded-xl flex justify-center items-center text-2xl sm:text-4xl md:text-6xl" id="coloring">
           <i class="fa fa-play-circle opacity-60" aria-hidden="true"></i>
         </div>
-        <div class="absolute bottom-0 p-2">
-          <h1 class="text-md font-semibold">Chapter ${data.episode_number}</h1>
-          <p class="text-xs">${data.overview}</p>
+        <div class="absolute bottom-0 max-h-full overflow-y-auto px-2 content-card-episode">
+          <h1 class="text-sm sm:text-md font-semibold">Chapter ${data.episode_number}</h1>
+          <p class="text-2xs leading-3 text-overview desc clamp">${data.overview}</p>
+        </div>
+        <div class="absolute hidden bottom-1 px-2 detail-text-overview"> 
+            <p class=" leading-2 text-xs text-start tracking-wider">
+                <button class="underline text-2xs cursor-pointer text-blue-400" onclick="detailOverview(this)">Lebih banyak </button>
+            </p>
         </div>
       </div>`
       cardsEpisode += uiCardEpisode;
     })
 
     const ui = `
-    <h1 class="font-semibold text-xl">${seasonNow.name}</h1>
+    <h1 class="font-semibold text-xl">Seasons ${seasonNow.id}</h1>
     <div class="w-full flex justify-between">
       <h2 class="my-1 font-semibold text-xl">${episodeOnSeasonNow[1]}</h2>
-      <div class="dropdown dropdown-start">
-        <div tabindex="0" role="button" class="px-4 py-1 rounded-md text-sm cursor-pointer">${seasonNow.name}<i class="fa fa-caret-down ml-1" aria-hidden="true"></i> </div>
-          <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-box z-1 p-2 shadow-sm">
+      <div class="dropdown dropdown-end">
+        <div tabindex="0" role="button" class="px-4 py-1 rounded-md text-sm cursor-pointer">Seasons ${seasonNow.id}<i class="fa fa-caret-down ml-1" aria-hidden="true"></i> </div>
+          <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-box p-2 shadow-sm absolute z-100">
             ${uiDropdown}
           </ul>
       </div>
       </div>
-    <div class="w-full flex gap-3 text-white overflow-x-auto">
-      ${cardsEpisode}
-  
+    <div class="w-full px-2 md:px-4 relative"> 
+        <h1 class="text-2xl font-semibold"></h1>
+        <button class="hidden invisible sm:visible shadow-xs shadow-gray-500 sm:cursor-pointer z-50 absolute bottom-1/2 translate-y-1/3 left-0 w-8 h-8 bg-white text-[#555] rounded-full text-3xl text-center font-bold" data-number="0" data-arrow="left" onclick="handleBtnArrow(this)"><
+        </button>
+        <div class="w-full flex gap-3 text-white overflow-y-hidden overflow-x-auto snap-x container-card-episode">
+            ${cardsEpisode}
+        </div>
+        <button class="z-50 sm:cursor-pointer shadow-xs ${episodeOnSeasonNow[0].length<4 ? 'hidden' : ''} shadow-gray-500 invisible sm:visible absolute bottom-1/2 translate-y-1/3 right-2 w-8 h-8 bg-white text-[#555] rounded-full text-3xl text-center font-bold" data-number="0" data-arrow="right" onclick="handleBtnArrow(this)">>
+        </button>
     </div>`;
+    containerContentSeasons.innerHTML = '';
     containerContentSeasons.innerHTML = ui;
+    checkCardEpisodeInseries(containerContentSeasons);
 }
 async function epsiodeInSeries(data){
     const url = new URLSearchParams(window.location.search);
     const idMovie = url.get('id');  
-    const typeData = url.get('typeData') == 'series' ? 'tv' : 'movie'
-
-    let respon = [];
-    let num_episode = 0
-    for(let i=1; i <= data.episode_count; i++){
-        const temp = await fetch(`https://api.themoviedb.org/3/${typeData}/${idMovie}/season/${data.name.split(' ')[1]}/episode/${i}?api_key=8482e16292527bd819173faa9e3fb365`)
+    const typeData = url.get('typeData') == 'series' ? 'tv' : 'movie';
+    const res = await fetch(`https://api.themoviedb.org/3/${typeData}/${idMovie}/season/${data.id}?api_key=8482e16292527bd819173faa9e3fb365`)
                     .then(e => e.json()).then(e => e);
-        if(temp != undefined){
-            respon.push(temp)
-            num_episode +=1;
-        } 
+    const stringEpisode = (res.episodes.length > 1) ? `1 - ${res.episodes.length} Episode` : `${res.episodes.length} Episode`;
+    return [res.episodes, stringEpisode]
+}
+function detailOverview(button){
+    const contentCard = button.parentElement.parentElement.previousElementSibling.querySelector('.desc');
+
+    contentCard.classList.toggle('clamp');
+    contentCard.classList.toggle('expanded');
+    button.textContent = (button.textContent=="Lebih banyak ") ? "Lebih sedikit" : "Lebih banyak";
+}
+function checkCardEpisodeInseries(container){
+    const containerCard = container.querySelector('.container-card-episode');
+    const card = containerCard.children;
+    const textOverview = container.querySelectorAll('.text-overview');
+
+    for(let i=0; i<textOverview.length; i++){
+        const minHeight = textOverview[i].clientHeight + (textOverview[i].clientHeight/2);
+        if(textOverview[i].scrollHeight > (minHeight === 0 ? 0 : minHeight-1)) showButtonDetail(card[i]);
     }
-    const stringEpisode = (num_episode > 1) ? `1 - ${num_episode} Episode` : `${num_episode} Episode`;
-    return [respon, stringEpisode]
+
+    function showButtonDetail(container){
+        const buttonDetail = container.querySelector('.detail-text-overview');
+        const contentCard = container.querySelector('.content-card-episode');
+
+        buttonDetail.classList.replace('hidden', 'block')
+        contentCard.classList.add('bottom-3');
+    }
 }
 
 // About Cast
@@ -329,7 +427,6 @@ function checkCardCast(container){
 
 // Home Content
 function loadUiHome(data, typeData){
-    console.log(data)
     const storyLine = document.getElementById('storyLine');
     let firstList = '';
     if(typeData == 'series'){
@@ -354,7 +451,7 @@ function loadUiHome(data, typeData){
     storyLine.textContent += data.overview;
     const genre = findGenre(data.genres)
     return `<img src="https://image.tmdb.org/t/p/original${data.backdrop_path}" class="h-full w-full object-cover" alt="">
-    <div class="absolute w-full h-1/3 bottom-0 z-10 grid md:grid-cols-2 gap-1">
+    <div class="absolute w-full min-h-1/3 bottom-0 z-10 grid md:grid-cols-2 gap-1">
         <div class="relative w-full flex flex-col justify-end gap-1 px-4 pb-3.5 text-white" id="partOfContainerHome">
             <button class="w-16 h-6.5 rounded-xl bg-gray-800 text-white text-sm">${typeData}</button>
             <h1 class="mt-1 md:mt-4 text-4xl font-bold">${data.title || data.name}</h1>
