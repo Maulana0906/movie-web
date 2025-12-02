@@ -306,7 +306,7 @@ function cards(data,type, typeData){
     }
     const innerUiCard = loadUiCard('vote_average');
     let scrollSnap = (type==='start')?'snap-start':'';
-    return `<a href="detail-movie.html?id=${data.id}&typeData=${typeData}" class="inline-block md:w-[calc(25%-8px)] lg:w-[calc(16.666%-8px)] sm:w-[calc(33.333%-8px)] w-[calc(50%-8px)] ${scrollSnap} mx-1 rounded-xl hover:scale-[98%] duration-200 ease-in-out">
+    return `<a href="detail-movie.html?id=${data.id}&typeData=${typeData}&age=child" class="inline-block md:w-[calc(25%-8px)] lg:w-[calc(16.666%-8px)] sm:w-[calc(33.333%-8px)] w-[calc(50%-8px)] ${scrollSnap} mx-1 rounded-xl hover:scale-[98%] duration-200 ease-in-out">
                 ${innerUiCard}
             </a>`
 }

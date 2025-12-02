@@ -42,6 +42,7 @@ setTimeout(async ()=> {
     const url = new URLSearchParams(window.location.search);
     const idMovie = url.get('id');
     const typeData = url.get('typeData');
+    const classAge = url.get('age');
 
     // container Home
     const movie = await getApi(idMovie, typeData);
@@ -60,11 +61,11 @@ setTimeout(async ()=> {
     })
 
     // cast
-    // loadUiCast(movie.id, typeData);
+    loadUiCast(movie.id, typeData);
 
     // season series
     if(typeData === 'series') seasonsOfSeries(movie.seasons);
-    // reviewsVideo(idMovie, typeData);
+    reviewsVideo(idMovie, typeData);
     
     // episode
     document.addEventListener('click', (el) => {
@@ -84,18 +85,19 @@ setTimeout(async ()=> {
         }
     })
 
-    // similarVideo(idMovie,typeData);
-    // recomendationVideo(idMovie,typeData);
+    similarVideo(idMovie,typeData, classAge);
+    recomendationVideo(idMovie,typeData, classAge);
     
 },0)
 // primary content
-async function recomendationVideo(id, typeData){
+async function recomendationVideo(id, typeData, age){
     const container = document.getElementById('containerRecomendationVideo');
-    const respon = await getApi(id+'/recommendations', typeData, '&certification_country=US&certification.lte=G&sort_by=popularity.desc&with_genres=16')
+    const overQuery = age== 'child' ? '&certification_country=US&certification.lte=G&sort_by=popularity.desc&with_genres=16' : undefined;
+    const respon = await getApi(id+'/recommendations', typeData, overQuery)
     let uiCardsRecomendation =  ``;
     respon.results.forEach((data, i) => {
         if(i < 12){
-        const ui = `<div class="flex-none md:w-[calc(25%-8px)] mx-[4px] lg:w-[calc(16.666%-8px)] sm:w-[calc(33.333%-8px)] w-[calc(50%-8px)]">
+        const ui = `<a href="detail-movie.html?id=${data.id}&typeData=${typeData}&age=${age}" class="flex-none md:w-[calc(25%-8px)] mx-[4px] lg:w-[calc(16.666%-8px)] sm:w-[calc(33.333%-8px)] w-[calc(50%-8px)]">
                 <div class="w-full aspect-2/3">
                     <img src="https://image.tmdb.org/t/p/original${data.poster_path}" class="w-full h-full object-cover rounded-xl" alt="">
                 </div>
@@ -109,22 +111,22 @@ async function recomendationVideo(id, typeData){
                         <p class="leading-none text-sm">${data.popularity}</p>
                     </div>
                 </div>
-            </div>`
+            </a>`
         uiCardsRecomendation += ui;
         }
     })
     container.innerHTML = '';
-    container.parentElement.children[0].textContent = `Recomendations ${typeData} for you`;
+    container.parentElement.children[0].textContent = (respon.results.length !== 0) ? `Recomendations ${typeData} for you` : '';
     container.innerHTML += uiCardsRecomendation;
 } 
-async function similarVideo(id, typeData){
+async function similarVideo(id, typeData, age){
     const container = document.getElementById('containerSimilarVideo');
-    const respon = await getApi(id+'/similar', typeData, '&certification_country=US&certification.lte=G&sort_by=popularity.desc&with_genres=16')
-    
+    const overQuery = age== 'child' ? '&certification_country=US&certification.lte=G&sort_by=popularity.desc&with_genres=16' : undefined;
+    const respon = await getApi(id+'/similar', typeData, overQuery);
     let uiCardsSimilar =  ``;
     respon.results.forEach((data, i) => {
         if(i < 12){
-        const ui = `<div class="flex-none md:w-[calc(25%-8px)] mx-[4px] lg:w-[calc(16.666%-8px)] sm:w-[calc(33.333%-8px)] w-[calc(50%-8px)]">
+        const ui = `<a href="detail-movie.html?id=${data.id}&typeData=${typeData}&age=${age}" class="flex-none md:w-[calc(25%-8px)] mx-[4px] lg:w-[calc(16.666%-8px)] sm:w-[calc(33.333%-8px)] w-[calc(50%-8px)]">
                 <div class="w-full aspect-2/3">
                     <img src="https://image.tmdb.org/t/p/original${data.poster_path}" class="w-full h-full object-cover rounded-xl" alt="">
                 </div>
@@ -138,7 +140,7 @@ async function similarVideo(id, typeData){
                         <p class="leading-none text-sm">${data.popularity}</p>
                     </div>
                 </div>
-            </div>`
+            </a>`
         uiCardsSimilar += ui;
         }
     })

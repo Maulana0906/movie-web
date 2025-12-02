@@ -293,15 +293,15 @@ function textHome(data){
             <img src="img/fire.png" class="h-4 w-4 ml-3 -mt-0.5" alt="">
             <p class="leading-none text-sm">${data.popularity}</p>
         </div>
-      <button type="button" class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-4 py-1.5 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
-      Detail <i class="fa fa-long-arrow-right" aria-hidden="true"></i></button>
+      <a href="detail-movie.html?id=${data.id}&typeData=movie&age=adults" class="text-gray-900 bg-white border border-gray-300 hover:bg-gray-100 focus:ring-4 font-medium rounded-full text-sm px-4 py-1.5 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
+      Detail <i class="fa fa-long-arrow-right" aria-hidden="true"></i></a>
     </div>
     `
 }
-function cards(data,type, typeData){
+function cards(data,type, typeData){    
 let scrollSnap = (type==='start')?'snap-start':'';
     return `
-<a href="detail-movie.html?id=${data.id}&typeData=${typeData}" class="inline-block md:w-[calc(25%-8px)] lg:w-[calc(16.666%-8px)] sm:w-[calc(33.333%-8px)] mx-[4px] w-[calc(50%-8px)] ${scrollSnap} rounded-xl  hover:scale-[98%] duration-200 ease-in-out">
+<a href="detail-movie.html?id=${data.id}&typeData=${typeData}&age=adults" class="inline-block md:w-[calc(25%-8px)] lg:w-[calc(16.666%-8px)] sm:w-[calc(33.333%-8px)] mx-[4px] w-[calc(50%-8px)] ${scrollSnap} rounded-xl  hover:scale-[98%] duration-200 ease-in-out">
     <div class="w-full aspect-2/3 skeleton"> 
         <img class="rounded-xl w-full h-full object-cover shadow-sm card" src="https://image.tmdb.org/t/p/w500${data.poster_path}" alt="" />
     </div>
