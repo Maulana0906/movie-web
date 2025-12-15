@@ -1,4 +1,5 @@
 {
     "css.lint.unknownProperties": "warning",
-    "scss.lint.unknownProperties": "warning"
+    "scss.lint.unknownProperties": "warning",
+    "liveServer.settings.port": 5501
 }
